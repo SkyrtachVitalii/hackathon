@@ -1,32 +1,49 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
-<title>Personal sheduling service</title>
-<meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scalee=1.0">
-    <link rel="stylesheet" type="text/css" href="./css/reset.css">
-    <link rel="stylesheet" type="text/css" href="./css/bootstrap.css">
-    <link rel="stylesheet" type="text/css" href="./css/style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <!-- Material Icon -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+    <!-- Own Styles -->
+    <link rel="stylesheet" href="css/style.css">
 </head>
 
 <body>
-    <header class="header">
-        <h1>Personal sheduling service</h1>
-    </header>
-<container class="container">
-    <section class="section">
-        <!--Перший ряд сітки BOOTSTRAP-->
-        <div class="row">
 
-        </div>
-    </section>
-</container>
-<footer class="footer">
-    <h1>Personal sheduling service</h1>
-</footer>
+    <input id="inpEvent" type="text" placeholder="Заплануйте нову подію">
+    <p> <input id="inpCategory" type="text" placeholder="Зазначте категорію події" list="categoryList"> </p>
+
+    <datalist id="categoryList">
+        <option value="Особиста подія"></option>
+        <option value="Робоча подія"></option>
+        <option value="ВАЖЛИВО!"></option>
+    </datalist>
+
+    <button id="addBtn">Додати подію</button>
+    <ul id="out"></ul>
+    <table id="eventManagePanel">
+        <tr>
+            <th>Виконано</th>
+            <th>Назва події</th>
+            <th>
+                <select id="categoryFilter">
+                     <option value="Всі категорії">Всі категорії</option>
+                   <!-- <option value="Особиста подія">Особиста подія</option>
+                    <option value="Робоча подія">Робоча подія</option>
+                    <option value="ВАЖЛИВО!">ВАЖЛИВО!</option> -->
+                </select>
+            </th>
+            <th>Видалити подію</th>
+        </tr>
+    </table>
+
+    <script defer src="js/app.js"></script>
+
 </body>
-<script src="./js/bootstrap.js"></script>
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+
 </html>
