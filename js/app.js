@@ -7,7 +7,6 @@ function todoMain() {
     let inputElemCategory
     let addButton
     let managePanel
-    // let eventRow
     let selectElem
 
     getElements()
@@ -74,16 +73,14 @@ function todoMain() {
             basketCell.appendChild(basket)
             eventRow.appendChild(basketCell)
 
-            //Add custom select elements
-            if (inputValueCategory !== 'Особиста подія' && inputValueCategory !== 'Робоча подія' && inputValueCategory !== 'ВАЖЛИВО!') {
-                updateFilterOptions()
-            }
+            //Updat filter options
+            updateFilterOptions()
 
             function deleteEvent() {
                 eventRow.remove() // Замыкание!!!
                 updateFilterOptions()
             }
-    
+
             function doneEvent() {
                 eventRow.classList.toggle('strike')
             }
@@ -109,21 +106,25 @@ function todoMain() {
     }
 
     function updateFilterOptions() {
-        let filters = ['Всі категорії']
+        let filters = ['Всі категорії'] //by default
 
         const events = Array.from(document.querySelectorAll('table>tr'))
+
         events.forEach((item) => {
             const category = item.querySelector('.categoryName').innerText
             filters.push(category)
         })
 
+        let filterSet = new Set(filters)
+
         selectElem.innerHTML = ''
 
-        filters.forEach((item) => {
+        for (let item of filterSet) {
             let customFilterElem = document.createElement('option')
             customFilterElem.value = item
             customFilterElem.innerText = item
             selectElem.appendChild(customFilterElem)
-        })
+        }
+
     }
 }
