@@ -11,12 +11,14 @@ function todoMain() {
         sortByDateBtn,
         managePanel,
         selectElem,
-        eventList = []
+        eventList = [],
+        calendar
 
 
     // App start
     getElements()
     addListeners()
+    initCalendar()
     loadEvents()
     renderAllEvents()
     updateFilterOptions()
@@ -83,6 +85,9 @@ function todoMain() {
 
     function filterEvents() {
         const events = Array.from(document.querySelectorAll('table>tr'))
+
+        calendar.getEvents().forEach(event=>event.remove())
+
         events.forEach((item) => {
             const category = item.querySelector('.categoryName')
             if (selectElem.value === 'Всі категорії') {
@@ -216,6 +221,12 @@ function todoMain() {
         basketCell.appendChild(basket)
         eventRow.appendChild(basketCell)
 
+        //Add event to calendar
+        addEventToCalendar({
+            title:name,
+            start:date,
+        })
+
         function deleteEvent() {
             eventRow.remove() // Замыкание!!!
             updateFilterOptions()
@@ -262,11 +273,32 @@ function todoMain() {
         })
 
         const events = document.querySelectorAll('table>tr')
-        for(let item of events){
-            item.remove() 
+        for (let item of events) {
+            item.remove()
         }
         renderAllEvents()
         updateFilterOptions()
+    }
+
+    function initCalendar() {
+        var calendarEl = document.getElementById('calendar');
+
+        calendar = new FullCalendar.Calendar(calendarEl, {
+            initialView: 'dayGridMonth',
+            initialDate: '2020-09-07',
+            headerToolbar: {
+                left: 'prev,next today',
+                center: 'title',
+                right: 'dayGridMonth,timeGridWeek,timeGridDay'
+            },
+            events: [],
+        });
+
+        calendar.render();
+    }
+
+    function addEventToCalendar(event) {
+        calendar.addEvent(event)
     }
 
 }
