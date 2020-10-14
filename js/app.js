@@ -3,12 +3,14 @@ todoMain()
 
 function todoMain() {
 
-    let inputElemEvent
-    let inputElemCategory
-    let addButton
-    let managePanel
-    let selectElem
-    let eventList = []
+    let inputElemEvent,
+        inputElemCategory,
+        dateInput,
+        timeInput,
+        addButton,
+        managePanel,
+        selectElem,
+        eventList = []
 
 
     // App start
@@ -21,6 +23,8 @@ function todoMain() {
     function getElements() {
         inputElemEvent = document.querySelector('#inpEvent')
         inputElemCategory = document.querySelector('#inpCategory')
+        dateInput = document.querySelector('#dateInput')
+        timeInput = document.querySelector('#timeInput')
         addButton = document.querySelector('#addBtn')
         managePanel = document.querySelector('#eventManagePanel')
         selectElem = document.querySelector('#categoryFilter')
@@ -41,11 +45,21 @@ function todoMain() {
         const inputValueCategory = inputElemCategory.value
         inputElemCategory.value = ''
 
+        //Get date
+        const inputValueDate = dateInput.value
+        dateInput.value = ''
+
+        //Get time
+        const inputValueTime = timeInput.value
+        timeInput.value = ''
+
         // Create obj for new event
         let eventObj = {
             id: _uuid(),
             name: inputValueEvent,
             category: inputValueCategory,
+            date: inputValueDate,
+            time: inputValueTime,
             isDone: false,
         }
 
@@ -126,6 +140,8 @@ function todoMain() {
         id,
         name,
         category,
+        date,
+        time,
         isDone,
     }) { //Деструктуризация
 
@@ -148,6 +164,29 @@ function todoMain() {
         }
         checkboxCell.appendChild(checkboxElem)
         eventRow.appendChild(checkboxCell)
+
+        //Add a date cell
+        let eventDateCell = document.createElement('td')
+        let eventDate = document.createElement('span')
+
+        let dateObj = new Date(date)
+        const uaDate = dateObj.toLocaleString('uk-UA', {
+            day: 'numeric',
+            month: 'long',
+            year: 'numeric',
+        })
+
+        eventDate.innerText = uaDate
+        eventDateCell.appendChild(eventDate)
+        eventRow.appendChild(eventDateCell)
+
+        //Add a time cell
+        let eventTimeCell = document.createElement('td')
+        let eventTime = document.createElement('span')
+        eventTime.innerText = time
+        eventTimeCell.appendChild(eventTime)
+        eventRow.appendChild(eventTimeCell)
+
 
         //Add a eventname cell
         let eventNameCell = document.createElement('td')
@@ -205,7 +244,7 @@ function todoMain() {
         if (typeof performance !== 'undefined' && typeof performance.now === 'function') {
             d += performance.now() // use high precision timer if available
         }
-        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c){
+        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
             var r = (d + Math.random() * 16) % 16 | 0
             d = Math.floor(d / 16)
             return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16)
