@@ -41,9 +41,12 @@ function todoMain() {
         const inputValueCategory = inputElemCategory.value
         inputElemCategory.value = ''
 
+        // Create obj for new event
         let eventObj = {
-            name:inputValueEvent,
-            category:inputValueCategory,
+            id: eventList.length,
+            name: inputValueEvent,
+            category: inputValueCategory,
+            isDone: false,
         }
 
         //Render new event category
@@ -51,7 +54,7 @@ function todoMain() {
             renderEvent(eventObj)
         }
 
-        //Create new event in array eventList
+        //Add new event in array eventList
         eventList.push(eventObj)
 
         //Save event to LocalStorage
@@ -115,11 +118,16 @@ function todoMain() {
 
     function renderAllEvents() {
         eventList.forEach(itemObj => {
-            renderEvent(itemObj)  //Деструктуризация
+            renderEvent(itemObj) //Деструктуризация
         })
     }
 
-    function renderEvent({name:name, category:category}) { //Деструктуризация
+    function renderEvent({
+        id,
+        name,
+        category,
+        isDone,
+    }) { //Деструктуризация
 
         //Add a new event (row)
         let eventRow = document.createElement('tr')
@@ -130,6 +138,14 @@ function todoMain() {
         let checkboxElem = document.createElement('input')
         checkboxElem.type = 'checkbox'
         checkboxElem.addEventListener('click', doneEvent)
+        checkboxElem.dataset.id = id
+        if (isDone) {
+            eventRow.classList.add('strike')
+            checkboxElem.checked = true
+        } else {
+            eventRow.classList.remove('strike')
+            checkboxElem.checked = false
+        }
         checkboxCell.appendChild(checkboxElem)
         eventRow.appendChild(checkboxCell)
 
@@ -151,6 +167,7 @@ function todoMain() {
         //Add a basket cell
         let basketCell = document.createElement('td')
         let basket = document.createElement('i')
+        basket.dataset.id = id
         basket.innerText = 'delete'
         basket.className = 'material-icons'
         basket.addEventListener('click', deleteEvent)
@@ -160,10 +177,25 @@ function todoMain() {
         function deleteEvent() {
             eventRow.remove() // Замыкание!!!
             updateFilterOptions()
+
+            for (let i = 0; i < eventList.length; i++) {
+                if (eventList[i].id == this.dataset.id) {
+                    eventList.splice(i, 1)
+                }
+            }
+
+            saveEvent()
         }
 
         function doneEvent() {
             eventRow.classList.toggle('strike')
+            for (let item of eventList) {
+                if (item.id == this.dataset.id) {
+                    item.isDone = !item.isDone
+                }
+            }
+
+            saveEvent()
         }
     }
 
