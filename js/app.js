@@ -65,7 +65,26 @@ function todoMain() {
             time: inputValueTime,
             isDone: false,
         }
-
+        //Event add for google calendar
+        if (gapi.auth2.getAuthInstance().isSignedIn.get()) {
+            var event = {
+                    'summary': eventObj.name,
+                    'id': eventObj.id,
+                    'start': {
+                        'date': eventObj.date,
+                    },
+                    'end': {
+                        'date': eventObj.date,
+                    },
+                }
+                var request = gapi.client.calendar.events.insert({
+                    'calendarId': CAL_ID,
+                    'resource': event
+                })
+            request.execute()
+            // console.log('event pushed for gCal ' + event.id);
+        }
+//-------------------------------------------------------------------
         //Render new event category
         if (inputValueEvent != '') { //Запрещаем пустое событие
             renderEvent(eventObj)
@@ -223,6 +242,15 @@ function todoMain() {
             for (let i = 0; i < eventList.length; i++) {
                 if (eventList[i].id == this.dataset.id) {
                     eventList.splice(i, 1)
+                    //Event delete for google calendar
+                    if (gapi.auth2.getAuthInstance().isSignedIn.get()) {
+                        var request = gapi.client.calendar.events.delete({
+                            'calendarId': CAL_ID,
+                            'eventId': this.dataset.id,
+                        })
+                        request.execute()
+                        // console.log('id for delete: ' + this.dataset.id);
+                    }
                 }
             }
 
@@ -247,13 +275,13 @@ function todoMain() {
         if (typeof performance !== 'undefined' && typeof performance.now === 'function') {
             d += performance.now() // use high precision timer if available
         }
-        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+        return 'xxxxxxxxxxxx4xxxyxxxxxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
             var r = (d + Math.random() * 16) % 16 | 0
             d = Math.floor(d / 16)
             return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16)
         })
     }
-
+// xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx
     function sortEventListByDate() {
         eventList.sort((a, b) => {
             const aDate = Date.parse(a.date)

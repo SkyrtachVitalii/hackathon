@@ -55,9 +55,16 @@
             <th>Видалити подію</th>
         </tr>
     </table>
+    <button id="authorize_button" style="display: none;">Authorize</button>
+    <button id="signout_button" style="display: none;">Sign Out</button>
 
     <script defer src="js/app.js"></script>
 
+
+<script async defer src="https://apis.google.com/js/api.js" onload="this.onload=function(){};handleClientLoad()"
+    onreadystatechange="if (this.readyState === 'complete') this.onload()">
+    </script>
+    <script src="./js/googlecalendar.js" type="text/javascript"></script>
 </body>
 
 </html>
