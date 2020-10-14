@@ -8,9 +8,14 @@ function todoMain() {
     let addButton
     let managePanel
     let selectElem
+    let eventList = []
 
+
+    // App start
     getElements()
     addListeners()
+    loadEvents()
+    renderAllEvents()
 
     function getElements() {
         inputElemEvent = document.querySelector('#inpEvent')
@@ -35,58 +40,19 @@ function todoMain() {
         const inputValueCategory = inputElemCategory.value
         inputElemCategory.value = ''
 
+        //Render new event category
         if (inputValueEvent != '') {
-
-            //Add a new event (row)
-            let eventRow = document.createElement('tr')
-            managePanel.appendChild(eventRow)
-
-            //Add a checkbox cell
-            let checkboxCell = document.createElement('td')
-            let checkboxElem = document.createElement('input')
-            checkboxElem.type = 'checkbox'
-            checkboxElem.addEventListener('click', doneEvent)
-            checkboxCell.appendChild(checkboxElem)
-            eventRow.appendChild(checkboxCell)
-
-            //Add a eventname cell
-            let eventNameCell = document.createElement('td')
-            let eventName = document.createElement('span')
-            eventName.innerText = inputValueEvent
-            eventNameCell.appendChild(eventName)
-            eventRow.appendChild(eventNameCell)
-
-            //Add a categoryname cell
-            let categoryNameCell = document.createElement('td')
-            let categoryName = document.createElement('span')
-            categoryName.className = 'categoryName'
-            categoryName.innerText = inputValueCategory
-            categoryNameCell.appendChild(categoryName)
-            eventRow.appendChild(categoryNameCell)
-
-            //Add a basket cell
-            let basketCell = document.createElement('td')
-            let basket = document.createElement('i')
-            basket.innerText = 'delete'
-            basket.className = 'material-icons'
-            basket.addEventListener('click', deleteEvent)
-            basketCell.appendChild(basket)
-            eventRow.appendChild(basketCell)
-
-            //Updat filter options
-            updateFilterOptions()
-
-            function deleteEvent() {
-                eventRow.remove() // Замыкание!!!
-                updateFilterOptions()
-            }
-
-            function doneEvent() {
-                eventRow.classList.toggle('strike')
-            }
-
+            renderEvent(inputValueEvent, inputValueCategory)
         }
 
+        //Create new event in array eventList
+        eventList.push(inputValueEvent)
+
+        //Save event to LocalStorage
+        saveEvent()
+
+        //Update filter options
+        updateFilterOptions()
     }
 
     function filterEvents() {
@@ -127,4 +93,72 @@ function todoMain() {
         }
 
     }
+
+    function saveEvent() {
+        const stringified = JSON.stringify(eventList)
+        localStorage.setItem('eventList', stringified)
+    }
+
+    function loadEvents() {
+        let eventData = localStorage.getItem('eventList')
+        eventList = JSON.parse(eventData)
+        if (eventList === null) {
+            eventList = []
+        }
+    }
+
+    function renderAllEvents() {
+        eventList.forEach(item => {
+            renderEvent(item, null) // null - category
+        })
+    }
+
+    function renderEvent(inputValueEvent, inputValueCategory) {
+
+        //Add a new event (row)
+        let eventRow = document.createElement('tr')
+        managePanel.appendChild(eventRow)
+
+        //Add a checkbox cell
+        let checkboxCell = document.createElement('td')
+        let checkboxElem = document.createElement('input')
+        checkboxElem.type = 'checkbox'
+        checkboxElem.addEventListener('click', doneEvent)
+        checkboxCell.appendChild(checkboxElem)
+        eventRow.appendChild(checkboxCell)
+
+        //Add a eventname cell
+        let eventNameCell = document.createElement('td')
+        let eventName = document.createElement('span')
+        eventName.innerText = inputValueEvent
+        eventNameCell.appendChild(eventName)
+        eventRow.appendChild(eventNameCell)
+
+        //Add a categoryname cell
+        let categoryNameCell = document.createElement('td')
+        let categoryName = document.createElement('span')
+        categoryName.className = 'categoryName'
+        categoryName.innerText = inputValueCategory
+        categoryNameCell.appendChild(categoryName)
+        eventRow.appendChild(categoryNameCell)
+
+        //Add a basket cell
+        let basketCell = document.createElement('td')
+        let basket = document.createElement('i')
+        basket.innerText = 'delete'
+        basket.className = 'material-icons'
+        basket.addEventListener('click', deleteEvent)
+        basketCell.appendChild(basket)
+        eventRow.appendChild(basketCell)
+
+        function deleteEvent() {
+            eventRow.remove() // Замыкание!!!
+            updateFilterOptions()
+        }
+
+        function doneEvent() {
+            eventRow.classList.toggle('strike')
+        }
+    }
+
 }
