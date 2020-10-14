@@ -4,6 +4,8 @@
 
 .material-icons {
     cursor: pointer;
+    display: flex;
+    justify-content: center;
 }
 
 th, td {
