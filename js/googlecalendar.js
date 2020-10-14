@@ -1,5 +1,5 @@
 //Client ID and API key from the Developer Console
-        var CAL_ID = '3nc1dum8588g3dpggip4fs3lfo@group.calendar.google.com'
+        var CAL_ID = 'primary'
         var CLIENT_ID = '218997954927-p64rn4uoihnkbfc6ujk1bfcai83kjl01.apps.googleusercontent.com';
         var API_KEY = 'AIzaSyACDa6l8LICUTJDY3BM6WrbIdM7MWohGJ0';
 
