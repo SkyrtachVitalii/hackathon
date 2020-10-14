@@ -16,6 +16,7 @@ function todoMain() {
     addListeners()
     loadEvents()
     renderAllEvents()
+    updateFilterOptions()
 
     function getElements() {
         inputElemEvent = document.querySelector('#inpEvent')
@@ -40,13 +41,18 @@ function todoMain() {
         const inputValueCategory = inputElemCategory.value
         inputElemCategory.value = ''
 
+        let eventObj = {
+            name:inputValueEvent,
+            category:inputValueCategory,
+        }
+
         //Render new event category
-        if (inputValueEvent != '') {
-            renderEvent(inputValueEvent, inputValueCategory)
+        if (inputValueEvent != '') { //Запрещаем пустое событие
+            renderEvent(eventObj)
         }
 
         //Create new event in array eventList
-        eventList.push(inputValueEvent)
+        eventList.push(eventObj)
 
         //Save event to LocalStorage
         saveEvent()
@@ -108,12 +114,12 @@ function todoMain() {
     }
 
     function renderAllEvents() {
-        eventList.forEach(item => {
-            renderEvent(item, null) // null - category
+        eventList.forEach(itemObj => {
+            renderEvent(itemObj)  //Деструктуризация
         })
     }
 
-    function renderEvent(inputValueEvent, inputValueCategory) {
+    function renderEvent({name:name, category:category}) { //Деструктуризация
 
         //Add a new event (row)
         let eventRow = document.createElement('tr')
@@ -130,7 +136,7 @@ function todoMain() {
         //Add a eventname cell
         let eventNameCell = document.createElement('td')
         let eventName = document.createElement('span')
-        eventName.innerText = inputValueEvent
+        eventName.innerText = name
         eventNameCell.appendChild(eventName)
         eventRow.appendChild(eventNameCell)
 
@@ -138,7 +144,7 @@ function todoMain() {
         let categoryNameCell = document.createElement('td')
         let categoryName = document.createElement('span')
         categoryName.className = 'categoryName'
-        categoryName.innerText = inputValueCategory
+        categoryName.innerText = category
         categoryNameCell.appendChild(categoryName)
         eventRow.appendChild(categoryNameCell)
 
