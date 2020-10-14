@@ -1,6 +1,6 @@
 //Client ID and API key from the Developer Console
         var CAL_ID = '3nc1dum8588g3dpggip4fs3lfo@group.calendar.google.com'
-        var CLIENT_ID = '218997954927-q86b54ucajmfrdlaldjh3ej3kqsesrnc.apps.googleusercontent.com';
+        var CLIENT_ID = '218997954927-p64rn4uoihnkbfc6ujk1bfcai83kjl01.apps.googleusercontent.com';
         var API_KEY = 'AIzaSyACDa6l8LICUTJDY3BM6WrbIdM7MWohGJ0';
 
         // Array of API discovery doc URLs for APIs used by the quickstart
