@@ -7,7 +7,8 @@ function todoMain() {
         inputElemCategory,
         dateInput,
         timeInput,
-        addButton,
+        addBtn,
+        sortByDateBtn,
         managePanel,
         selectElem,
         eventList = []
@@ -25,13 +26,15 @@ function todoMain() {
         inputElemCategory = document.querySelector('#inpCategory')
         dateInput = document.querySelector('#dateInput')
         timeInput = document.querySelector('#timeInput')
-        addButton = document.querySelector('#addBtn')
+        addBtn = document.querySelector('#addBtn')
+        sortByDateBtn = document.querySelector('#sortByDateBtn')
         managePanel = document.querySelector('#eventManagePanel')
         selectElem = document.querySelector('#categoryFilter')
     }
 
     function addListeners() {
-        addButton.addEventListener('click', addEvent)
+        addBtn.addEventListener('click', addEvent)
+        sortByDateBtn.addEventListener('click', sortEventListByDate)
         selectElem.addEventListener('change', filterEvents)
     }
 
@@ -249,6 +252,21 @@ function todoMain() {
             d = Math.floor(d / 16)
             return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16)
         })
+    }
+
+    function sortEventListByDate() {
+        eventList.sort((a, b) => {
+            const aDate = Date.parse(a.date)
+            const bDate = Date.parse(b.date)
+            return aDate - bDate
+        })
+
+        const events = document.querySelectorAll('table>tr')
+        for(let item of events){
+            item.remove() 
+        }
+        renderAllEvents()
+        updateFilterOptions()
     }
 
 }

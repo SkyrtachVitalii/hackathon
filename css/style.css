@@ -4,11 +4,15 @@
 
 .material-icons {
     cursor: pointer;
-    display: flex;
-    justify-content: center;
 }
 
 th, td {
+    text-align: center;
     border: 1px solid black;
     padding: 5px;
+}
+
+#sortByDate{
+    display: block;
+    width: 100%;
 }
