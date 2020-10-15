@@ -18,18 +18,11 @@ th, td {
 }
 
 
-Aleksandr
-/*
+
+/* ===================================== Aleksandr ====================================== */
+
 
 @import url("https://fonts.googleapis.com/css2?family=Rowdies&family=Titillium+Web&display=swap");
-.strike{
-    text-decoration: line-through;
-}
-
-td{
-    border: 1px solid black;
-    padding: 5px;
-}
 
 .todo-input{
     display: grid;
@@ -85,14 +78,14 @@ body{
 }
 
 @media screen and (max-width: 767px){
-    /*for mobile or small device
+    /* for mobile or small device */
     #todoTable, .todo-calendar{
         margin-top: 1rem;
     }
 }
 
 @media screen and (min-width:768px){
-    /*for tablets*
+    /* for tablets */
     .todo-grid-parent{
         display: grid;
         grid-template-columns: 2fr 3fr;
@@ -125,7 +118,7 @@ body{
 .todo-modal{
     min-width: 50vw;
     height: 50vh;
-    /*border: 1px solid green*
+    border: 1px solid green;
     background-color: #ffd6cc;
 }
 
@@ -170,4 +163,3 @@ button:hover{
     text-align: right;
     margin-bottom: 0.5rem;
 }
-*/

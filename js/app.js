@@ -12,7 +12,8 @@ function todoMain() {
         managePanel,
         selectElem,
         eventList = [],
-        calendar
+        calendar,
+        shortListBtn
 
 
     // App start
@@ -20,7 +21,7 @@ function todoMain() {
     addListeners()
     initCalendar()
     loadEvents()
-    renderAllEvents()
+    renderAllEvents(eventList)
     updateFilterOptions()
 
     function getElements() {
@@ -32,12 +33,14 @@ function todoMain() {
         sortByDateBtn = document.querySelector('#sortByDateBtn')
         managePanel = document.querySelector('#eventManagePanel')
         selectElem = document.querySelector('#categoryFilter')
+        shortListBtn = document.querySelector('#shortListBtn')
     }
 
     function addListeners() {
         addBtn.addEventListener('click', addEvent)
         sortByDateBtn.addEventListener('click', sortEventListByDate)
-        selectElem.addEventListener('change', filterEvents)
+        selectElem.addEventListener('change', multipleFilter)
+        shortListBtn.addEventListener('change', multipleFilter)
     }
 
     function addEvent() {
@@ -67,26 +70,29 @@ function todoMain() {
             time: inputValueTime,
             isDone: false,
         }
+
         //Event add for google calendar
         if (gapi.auth2.getAuthInstance().isSignedIn.get()) {
             var event = {
-                    'summary': eventObj.name,
-                    'id': eventObj.id,
-                    'start': {
-                        'date': eventObj.date,
-                    },
-                    'end': {
-                        'date': eventObj.date,
-                    },
-                }
-                var request = gapi.client.calendar.events.insert({
-                    'calendarId': CAL_ID,
-                    'resource': event
-                })
+                'summary': eventObj.name,
+                'id': eventObj.id,
+                'start': {
+                    'date': eventObj.date,
+                },
+                'end': {
+                    'date': eventObj.date,
+                },
+            }
+            var request = gapi.client.calendar.events.insert({
+                'calendarId': CAL_ID,
+                'resource': event
+            })
             request.execute()
             // console.log('event pushed for gCal ' + event.id);
         }
-//-------------------------------------------------------------------
+        //-------------------------------------------------------------------
+
+
         //Render new event category
         if (inputValueEvent != '') { //Запрещаем пустое событие
             renderEvent(eventObj)
@@ -100,25 +106,6 @@ function todoMain() {
 
         //Update filter options
         updateFilterOptions()
-    }
-
-    function filterEvents() {
-        const events = Array.from(document.querySelectorAll('table>tr'))
-
-        calendar.getEvents().forEach(event=>event.remove())
-
-        events.forEach((item) => {
-            const category = item.querySelector('.categoryName')
-            if (selectElem.value === 'Всі категорії') {
-                item.style.display = ''
-            } else {
-                if (category.innerText !== selectElem.value) {
-                    item.style.display = 'none'
-                } else {
-                    item.style.display = ''
-                }
-            }
-        })
     }
 
     function updateFilterOptions() {
@@ -157,8 +144,8 @@ function todoMain() {
         }
     }
 
-    function renderAllEvents() {
-        eventList.forEach(itemObj => {
+    function renderAllEvents(arr) {
+        arr.forEach(itemObj => {
             renderEvent(itemObj) //Деструктуризация
         })
     }
@@ -242,8 +229,9 @@ function todoMain() {
 
         //Add event to calendar
         addEventToCalendar({
-            title:name,
-            start:date,
+            id: id,
+            title: name,
+            start: date,
         })
 
         function deleteEvent() {
@@ -266,6 +254,9 @@ function todoMain() {
             }
 
             saveEvent()
+
+            // Fullcalendar
+            calendar.getEventById(this.dataset.id).remove()
         }
 
         function doneEvent() {
@@ -292,7 +283,8 @@ function todoMain() {
             return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16)
         })
     }
-// xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx
+    // xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx
+
     function sortEventListByDate() {
         eventList.sort((a, b) => {
             const aDate = Date.parse(a.date)
@@ -300,11 +292,9 @@ function todoMain() {
             return aDate - bDate
         })
 
-        const events = document.querySelectorAll('table>tr')
-        for (let item of events) {
-            item.remove()
-        }
-        renderAllEvents()
+        saveEvent()
+        clearEvents()
+        renderAllEvents(eventList)
         updateFilterOptions()
     }
 
@@ -312,21 +302,79 @@ function todoMain() {
         var calendarEl = document.getElementById('calendar');
 
         calendar = new FullCalendar.Calendar(calendarEl, {
-            initialView: 'dayGridMonth',
-            initialDate: '2020-09-07',
             headerToolbar: {
                 left: 'prev,next today',
                 center: 'title',
-                right: 'dayGridMonth,timeGridWeek,timeGridDay'
+                right: 'dayGridMonth,timeGridWeek,timeGridDay,listMonth'
             },
-            events: [],
+            locale: 'uk',
+            buttonIcons: false, // show the prev/next text
+            weekNumbers: true,
+            navLinks: true, // can click day/week names to navigate views
+            editable: true,
+            dayMaxEvents: true, // allow "more" link when too many events
+            events: []
         });
 
         calendar.render();
+
     }
 
     function addEventToCalendar(event) {
         calendar.addEvent(event)
+    }
+
+    function clearEvents() {
+        const events = Array.from(document.querySelectorAll('table>tr'))
+
+        for (let item of events) {
+            item.remove()
+        }
+
+        // Fullcalendar
+        calendar.getEvents().forEach(event => event.remove())
+    }
+
+    function multipleFilter() {
+        clearEvents()
+
+        if (selectElem.value === 'Всі категорії') {
+            if (shortListBtn.checked) {
+                let filteredIncompleteArr = eventList.filter(obj => obj.isDone === false)
+                renderAllEvents(filteredIncompleteArr)
+                let filteredCompleteArr = eventList.filter(obj => obj.isDone === true)
+                renderAllEvents(filteredCompleteArr)
+            } else {
+                renderAllEvents(eventList)
+            }
+        } else {
+            let filteredCategoryArr = eventList.filter(obj => obj.category === selectElem.value)
+
+            if (shortListBtn.checked) {
+                let filteredIncompleteArr = filteredCategoryArr.filter(obj => obj.isDone === false)
+                console.log("multipleFilter -> filteredIncompleteArr", filteredIncompleteArr)
+                
+                if (filteredIncompleteArr.length == 0) {
+                    let eventRow = document.createElement('tr')
+                    managePanel.appendChild(eventRow)
+                    let eventMessageCell = document.createElement('td')
+                    eventMessageCell.setAttribute('colspan', '6')
+                    let eventMessage = document.createElement('span')
+                    eventMessage.innerText = 'У Вас немає актуальних подій за обраною категорією'
+                    eventMessageCell.appendChild(eventMessage)
+                    eventRow.appendChild(eventMessageCell)    
+                } else {
+                    renderAllEvents(filteredIncompleteArr)
+                }
+
+                let filteredCompleteArr = filteredCategoryArr.filter(obj => obj.isDone === true)
+                renderAllEvents(filteredCompleteArr)
+                
+            } else {
+                renderAllEvents(filteredCategoryArr)
+            }
+        }
+
     }
 
 }
