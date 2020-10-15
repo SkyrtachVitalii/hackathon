@@ -73,16 +73,36 @@ function todoMain() {
 
         //Event add for google calendar
         if (gapi.auth2.getAuthInstance().isSignedIn.get()) {
+            if (!eventObj.time) {
+                var event = {
+                    'summary': eventObj.name,
+                    'id': eventObj.id,
+                    'start': {
+                        'date': eventObj.date,
+                        'timeZone': 'Europe/Kiev',
+                    },
+                    'end': {
+                        'date': eventObj.date,  
+                        'timeZone': 'Europe/Kiev',
+                    },
+                }
+            }
+         else {
             var event = {
                 'summary': eventObj.name,
                 'id': eventObj.id,
                 'start': {
-                    'date': eventObj.date,
+                    'dateTime': eventObj.date + 'T' + eventObj.time + ':00',
+                    'timeZone': 'Europe/Kiev',
                 },
                 'end': {
-                    'date': eventObj.date,
+                    'dateTime': eventObj.date + 'T' + eventObj.time + ':00',
+                    'timeZone': 'Europe/Kiev',
                 },
             }
+        }
+    // console.log(event);
+            
             var request = gapi.client.calendar.events.insert({
                 'calendarId': CAL_ID,
                 'resource': event
