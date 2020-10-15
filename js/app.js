@@ -67,6 +67,7 @@ function todoMain() {
             time: inputValueTime,
             isDone: false,
         }
+
         //Event add for google calendar
         if (gapi.auth2.getAuthInstance().isSignedIn.get()) {
             var event = {
@@ -301,6 +302,7 @@ function todoMain() {
         })
     }
 // xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx
+
     function sortEventListByDate() {
         eventList.sort((a, b) => {
             const aDate = Date.parse(a.date)

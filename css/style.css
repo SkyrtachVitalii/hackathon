@@ -18,18 +18,11 @@ th, td {
 }
 
 
+
 /* ===================================== Aleksandr ====================================== */
 
 
 @import url("https://fonts.googleapis.com/css2?family=Rowdies&family=Titillium+Web&display=swap");
-.strike{
-    text-decoration: line-through;
-}
-
-td{
-    border: 1px solid black;
-    padding: 5px;
-}
 
 .todo-input{
     display: grid;
