@@ -355,7 +355,14 @@ function todoMain() {
             navLinks: true, // can click day/week names to navigate views
             editable: true,
             dayMaxEvents: true, // allow "more" link when too many events
-            events: []
+            events: [],
+
+
+            //код - Віталій Скиртач
+            //editable: true,
+            //eventDrop: function (info){
+            //    calendarEventDragged(info.event);
+            //}
         });
 
         calendar.render();
@@ -474,4 +481,37 @@ function todoMain() {
         }
     }
 
+
+    //код - Скиртач Віталій урок 20
+    /*
+    function calendarEventDragged(event){
+        let id = event.id;
+        let dateObj = new Date(event.start);
+        let year = dateObj.getFullYear();
+        let month = dateObj.getMonth();
+        let date = dateObj.getDate();
+
+        let paddedMonth = month.toString();
+        if (paddedMonth.length < 2){
+            paddedMonth = "0" + paddedMonth;
+        }
+
+        let paddedDate = date.toString();
+        if (paddedDate.length < 2){
+            paddedDate = "0" + paddedDate;
+        }
+    
+        let toStoreDate = `${year}-${paddedMonth}-${paddedDate}`;
+        console.log(toStoreDate);
+
+        todoList.forEach(todoObj => {
+            if(todoObj.id == id){
+                todoObj.date = toStoreDate;
+            }
+        });
+        
+        save();
+        multipleFilter();
+
+    }*/
 }
