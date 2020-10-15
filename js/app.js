@@ -86,20 +86,24 @@ function todoMain() {
     function filterEvents() {
         const events = Array.from(document.querySelectorAll('table>tr'))
 
+        for (let item of events) {
+            item.remove()
+        }
+
+        // Fullcalendar
         calendar.getEvents().forEach(event=>event.remove())
 
-        events.forEach((item) => {
-            const category = item.querySelector('.categoryName')
-            if (selectElem.value === 'Всі категорії') {
-                item.style.display = ''
-            } else {
-                if (category.innerText !== selectElem.value) {
-                    item.style.display = 'none'
-                } else {
-                    item.style.display = ''
+        if (selectElem.value === 'Всі категорії') {
+            eventList.forEach(obj => {
+                renderEvent(obj)
+            })
+        } else {
+            eventList.forEach(obj => {
+                if(obj.category === selectElem.value){
+                    renderEvent(obj)
                 }
-            }
-        })
+            })
+        }
     }
 
     function updateFilterOptions() {
@@ -223,8 +227,9 @@ function todoMain() {
 
         //Add event to calendar
         addEventToCalendar({
-            title:name,
-            start:date,
+            id:id,
+            title: name,
+            start: date,
         })
 
         function deleteEvent() {
@@ -238,6 +243,9 @@ function todoMain() {
             }
 
             saveEvent()
+
+            // Fullcalendar
+            calendar.getEventById(this.dataset.id).remove()
         }
 
         function doneEvent() {
@@ -272,6 +280,8 @@ function todoMain() {
             return aDate - bDate
         })
 
+        saveEvent()
+
         const events = document.querySelectorAll('table>tr')
         for (let item of events) {
             item.remove()
@@ -285,7 +295,7 @@ function todoMain() {
 
         calendar = new FullCalendar.Calendar(calendarEl, {
             initialView: 'dayGridMonth',
-            initialDate: '2020-09-07',
+            initialDate: '2020-10-07',
             headerToolbar: {
                 left: 'prev,next today',
                 center: 'title',
