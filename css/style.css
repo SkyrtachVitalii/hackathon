@@ -99,7 +99,7 @@ body{
     }
 
     
-    }
+
     #calendar{
         position: sticky;
         top: 0;
@@ -170,4 +170,12 @@ button:hover{
 .itemsPerPage{
     text-align: right;
     margin-bottom: 0.5rem;
+}
+
+#authorize_button{
+    margin: 0 5px;
+}
+
+#eventManagePanel{
+    margin-top: 10px;
 }
