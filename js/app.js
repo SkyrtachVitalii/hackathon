@@ -41,6 +41,7 @@ function todoMain() {
         sortByDateBtn.addEventListener('click', sortEventListByDate)
         selectElem.addEventListener('change', multipleFilter)
         shortListBtn.addEventListener('change', multipleFilter)
+        managePanel.addEventListener('click', managePanelReduct)
     }
 
     function addEvent() {
@@ -114,7 +115,7 @@ function todoMain() {
 
 
         //Render new event category
-        if (inputValueEvent != '') { //Запрещаем пустое событие
+        if (inputValueEvent != '' && inputValueDate != '' && inputValueCategory != '' && inputValueTime != '') { //Запрещаем пустое событие
             renderEvent(eventObj)
         }
 
@@ -201,7 +202,12 @@ function todoMain() {
 
         //Add a date cell
         let eventDateCell = document.createElement('td')
+
         let eventDate = document.createElement('span')
+        eventDate.dataset.editable = true
+        eventDate.dataset.type = 'date'
+        eventDate.dataset.value = date
+        eventDate.dataset.id = id
 
         let dateObj = new Date(date)
         const uaDate = dateObj.toLocaleString('uk-UA', {
@@ -216,7 +222,12 @@ function todoMain() {
 
         //Add a time cell
         let eventTimeCell = document.createElement('td')
+
         let eventTime = document.createElement('span')
+        eventTime.dataset.editable = true
+        eventTime.dataset.type = 'time'
+        eventTime.dataset.id = id
+
         eventTime.innerText = time
         eventTimeCell.appendChild(eventTime)
         eventRow.appendChild(eventTimeCell)
@@ -224,14 +235,24 @@ function todoMain() {
 
         //Add a eventname cell
         let eventNameCell = document.createElement('td')
+
         let eventName = document.createElement('span')
+        eventName.dataset.editable = true
+        eventName.dataset.type = 'name'
+        eventName.dataset.id = id
+
         eventName.innerText = name
         eventNameCell.appendChild(eventName)
         eventRow.appendChild(eventNameCell)
 
         //Add a categoryname cell
         let categoryNameCell = document.createElement('td')
+
         let categoryName = document.createElement('span')
+        categoryName.dataset.editable = true
+        categoryName.dataset.type = 'category'
+        categoryName.dataset.id = id
+
         categoryName.className = 'categoryName'
         categoryName.innerText = category
         categoryNameCell.appendChild(categoryName)
@@ -261,15 +282,16 @@ function todoMain() {
             for (let i = 0; i < eventList.length; i++) {
                 if (eventList[i].id == this.dataset.id) {
                     eventList.splice(i, 1)
-                    //Event delete for google calendar
-                    if (gapi.auth2.getAuthInstance().isSignedIn.get()) {
-                        var request = gapi.client.calendar.events.delete({
-                            'calendarId': CAL_ID,
-                            'eventId': this.dataset.id,
-                        })
-                        request.execute()
-                        // console.log('id for delete: ' + this.dataset.id);
-                    }
+                }
+
+                // Event delete for google calendar
+                if (gapi.auth2.getAuthInstance().isSignedIn.get()) {
+                    var request = gapi.client.calendar.events.delete({
+                        'calendarId': CAL_ID,
+                        'eventId': this.dataset.id,
+                    })
+                    request.execute()
+                    // console.log('id for delete: ' + this.dataset.id);
                 }
             }
 
@@ -373,7 +395,7 @@ function todoMain() {
             if (shortListBtn.checked) {
                 let filteredIncompleteArr = filteredCategoryArr.filter(obj => obj.isDone === false)
                 console.log("multipleFilter -> filteredIncompleteArr", filteredIncompleteArr)
-                
+
                 if (filteredIncompleteArr.length == 0) {
                     let eventRow = document.createElement('tr')
                     managePanel.appendChild(eventRow)
@@ -382,19 +404,74 @@ function todoMain() {
                     let eventMessage = document.createElement('span')
                     eventMessage.innerText = 'У Вас немає актуальних подій за обраною категорією'
                     eventMessageCell.appendChild(eventMessage)
-                    eventRow.appendChild(eventMessageCell)    
+                    eventRow.appendChild(eventMessageCell)
                 } else {
                     renderAllEvents(filteredIncompleteArr)
                 }
 
                 let filteredCompleteArr = filteredCategoryArr.filter(obj => obj.isDone === true)
                 renderAllEvents(filteredCompleteArr)
-                
+
             } else {
                 renderAllEvents(filteredCategoryArr)
             }
         }
 
+    }
+
+    function managePanelReduct(event) {
+        if (event.target.matches('span') && event.target.dataset.editable == 'true') {
+            let tempInputElem
+            switch (event.target.dataset.type) {
+                case 'date':
+                    tempInputElem = document.createElement('input')
+                    tempInputElem.type = 'date'
+                    tempInputElem.value = event.target.dataset.value
+                    break
+                case 'time':
+                    tempInputElem = document.createElement('input')
+                    tempInputElem.type = 'time'
+                    tempInputElem.value = event.target.innerText
+                    break
+                case 'name':
+                    tempInputElem = document.createElement('input')
+                    tempInputElem.type = 'text'
+                    tempInputElem.value = event.target.innerText
+                    break
+                case 'category':
+                    tempInputElem = document.createElement('input')
+                    tempInputElem.type = 'text'
+                    tempInputElem.value = event.target.innerText
+                    break
+            }
+            tempInputElem.addEventListener('change', addNewEventData)
+            event.target.innerText = ''
+            event.target.appendChild(tempInputElem)
+        }
+
+        function addNewEventData(event) {
+            const newEventData = event.target.value
+            const eventId = event.target.parentNode.dataset.id
+
+            calendar.getEventById(eventId).remove()
+
+            eventList.forEach(itemObj => {
+                if (itemObj.id === eventId) {
+                    // itemObj.name = newEventName
+                    itemObj[event.target.parentNode.dataset.type] = newEventData
+                    addEventToCalendar({
+                        id: itemObj.id,
+                        title: itemObj.name,
+                        start: itemObj.date,
+                    })
+                }
+            })
+
+            saveEvent()
+            clearEvents()
+            renderAllEvents(eventList)
+            updateFilterOptions()
+        }
     }
 
 }
