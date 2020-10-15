@@ -471,6 +471,8 @@ function todoMain() {
                         title: itemObj.name,
                         start: itemObj.date,
                     })
+                    updateGoogleEvent(itemObj);
+                    // console.log(itemObj);
                 }
             })
 

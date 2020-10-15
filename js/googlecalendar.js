@@ -90,4 +90,4 @@
             // var textContent = document.createTextNode(message + '\n');
             // pre.appendChild(textContent);
             console.log(message);
-        }
+}
