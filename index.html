@@ -22,10 +22,15 @@
     <!-- Material Icon -->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
-    <!-- Fullcalendar -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@5.3.2/main.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.3.2/main.min.js"></script>
-    <!-- <script src='./fullcalendar-5.3.2/lib//locales/uk.js'></script> -->
+    <!-- Fullcalendar cdn -->
+    <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@5.3.2/main.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.3.2/main.min.js"></script> -->
+    <!-- <script src='./fullcalendar-5.3.2/lib//locales/uk.js'></script> -- >
+
+    <!- FullCalendar local-->
+    <link rel="stylesheet" href="./fullcalendar-5.3.2/lib/main.min.css">
+    <script src="fullcalendar-5.3.2/lib/main.min.js"></script>
+    <script defer src="js/app.js"></script>
 
     <!-- Own Styles -->
     <link rel="stylesheet" href="css/style.css">
@@ -73,16 +78,16 @@
             
             <table id="eventManagePanel" class="todo-block">
                 <tr>
-                    <th>Виконано</th>
-                    <th>Дата події  </th>
-                    <th>Час події</th>
-                    <th>Назва події</th>
-                    <th>
+                    <th id="done">Виконано</th>
+                    <th id="date">Дата події  </th>
+                    <th id="time">Час події</th>
+                    <th id="nazva">Назва події</th>
+                    <th id="allCategory">
                         <select id="categoryFilter">
                             <option value="Всі категорії">Всі категорії</option>
                         </select>
                     </th>
-                    <th>Видалити подію</th>
+                    <th id="delete">Видалити подію</th>
                 </tr>
             </table>
         </div>
@@ -99,8 +104,8 @@
     <!-- <button id="authorize_button" style="display: none;">Додати google календар</button>
     <button id="signout_button" style="display: none;">Видалити google календар</button>
     <span id="gmail" style="display: none;"></span> -->
-    <script src="js/googleaddupdate.js"></script>
-    <script defer src="js/app.js"></script>
+
+    
 
     <script async defer src="https://apis.google.com/js/api.js" onload="this.onload=function(){};handleClientLoad()"
     onreadystatechange="if (this.readyState === 'complete') this.onload()">
