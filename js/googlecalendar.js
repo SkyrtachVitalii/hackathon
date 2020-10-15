@@ -1,6 +1,6 @@
 //Client ID and API key from the Developer Console
         var CAL_ID = 'primary'
-        var CLIENT_ID = '218997954927-p64rn4uoihnkbfc6ujk1bfcai83kjl01.apps.googleusercontent.com';
+        var CLIENT_ID = '218997954927-kqm63eac5s46dud6kmb5nnipvt05tjaa.apps.googleusercontent.com';
         var API_KEY = 'AIzaSyACDa6l8LICUTJDY3BM6WrbIdM7MWohGJ0';
 
         // Array of API discovery doc URLs for APIs used by the quickstart
@@ -12,9 +12,7 @@
 
         var authorizeButton = document.getElementById('authorize_button');
         var signoutButton = document.getElementById('signout_button');
-        var addEventButton = document.getElementById('addBtn');
-        // var showEvents = document.getElementById('showEvents');
-
+        
         /**
          *  On load, called to load the auth2 library and API client library.
          */
