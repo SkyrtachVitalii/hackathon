@@ -352,6 +352,7 @@ function todoMain() {
                 right: 'dayGridMonth,timeGridWeek,timeGridDay,listMonth'
             },
             locale: 'uk',
+            contentHeight: 'auto',
             buttonIcons: false, // show the prev/next text
             weekNumbers: true,
             navLinks: true, // can click day/week names to navigate views

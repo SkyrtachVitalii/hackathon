@@ -12,102 +12,104 @@ th, td {
     padding: 5px;
 }
 
-#sortByDate{
+#sortByDate {
     display: block;
     width: 100%;
 }
 
-
-
 /* ===================================== Aleksandr ====================================== */
 
+/* @import url("https://fonts.googleapis.com/css2?family=Rowdies&family=Titillium+Web&display=swap"); */
 
-@import url("https://fonts.googleapis.com/css2?family=Rowdies&family=Titillium+Web&display=swap");
-
-.todo-input{
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed&display=swap');
+.todo-input {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    /* grid-template-columns: 1fr 1fr; */
     row-gap: 1rem;
 }
 
-.todoTable-block{
+.todoTable-block {
     margin-top: 1rem;
 }
-.pagination-pages{
+
+.pagination-pages {
     text-align: right;
 }
 
-.pagination-pages > *{
+.pagination-pages>* {
     margin-right: 0.5rem;
     cursor: pointer;
 }
 
-.material-icons{
+.material-icons {
     cursor: pointer;
 }
 
-::-ms-input-placeholder{
-    color: #ed6a5e;
-}
-::-webkit-input-placeholder{
-     color:#ed6a5e ;
+::-ms-input-placeholder {
+    color: #7EC2DC;
 }
 
-::placeholder{
-    color: #ed6a5e;
+::-webkit-input-placeholder {
+    color: #7EC2DC;
 }
 
-input{
-    color: #a11e12;
+::placeholder {
+    color: #7EC2DC;
 }
 
-h3{
-    color: #a11e12;
-    font-family: "rowdies",cursive;
+input {
+    color: #1B3A56;
+}
+
+h3 {
+    color: #E2E9EF;
+    font-family: "rowdies", cursive;
     padding: 1rem;
-    background-color: #ed6a5e;
-}
-body{
-    font-family:"Titillium Web", sans-serif;
-    
+    background-color: #01467A;
+    border-radius: 10px;
 }
 
+body {
+    /* font-family:"Titillium Web", sans-serif; */
+    font-family: 'Roboto Condensed', sans-serif;
+}
 
-
-.todo-block{
-    border: 1px solid #ff8e72;
-    padding:  1rem;
+.todo-block {
+    border: 1px solid #01467A;
+    padding: 1rem;
     border-radius: 20px;
-    color: #a11e12;
+    color: #01467A;
 }
-#todoTable{
+
+#date, #time, #nazva, #allCategory {
+    /* border-radius: 10px; */
+    background-color: #00467A;
+    color: white;
+}
+
+#categoryFilter {
+    background-color: #016986;
+    color: #FEFEFE;
+    border-radius: 10px;
+}
+
+#done {
+    background-color: green;
+    color: white;
+    /* border-radius: 10px; */
+}
+
+#delete {
+    background-color: red;
+    color: white;
+    /* border-radius: 10px; */
+}
+
+#todoTable {
     margin-top: 1rem;
 }
-@media screen and (max-width: 767px){
-    /* for mobile or small device */
-    #todoTable, #calendar{
-        margin-top: 1rem;
-    }
-}
 
-@media screen and (min-width:768px){
-    /* for tablets*/ 
-    .todo-grid-parent{
-        display: grid;
-        grid-template-columns: 2fr 3fr;
-        column-gap: 1rem;
-    }
-
-    
-
-    #calendar{
-        position: sticky;
-        top: 0;
-
-    }
-}
-
-.todo-overlay{
+.todo-overlay {
     width: 100vw;
     height: 100vh;
     background-color: #dddddd;
@@ -119,18 +121,18 @@ body{
     justify-content: center;
     align-items: center;
     transform: translateX(-100vw);
-    transition: transform 250ms ;
+    transition: transform 250ms;
     z-index: 2;
-}    
+}
 
-.todo-modal{
+.todo-modal {
     min-width: 50vw;
     height: 50vh;
     border: 1px solid green;
     background-color: #ffd6cc;
 }
 
-.todo-modal-close-btn{
+.todo-modal-close-btn {
     background-color: red;
     position: absolute;
     top: 2rem;
@@ -144,38 +146,143 @@ body{
     font-weight: bold;
 }
 
-.slidedIntoView{
+.slidedIntoView {
     transform: translateX(0);
     transition: transform 650ms;
 }
 
-#todoTable tr:nth-child(even){
+#todoTable tr:nth-child(even) {
     background-color: #ffd6cc;
 }
 
-button{
-    background-color: #ffd6cc;
-    color: #a11e12;
-    border: 1px outset #ed6a5e;
+button {
+    background-color: #025B86;
+    color: #99CCD1;
+    border: 1px outset #01467A;
+    border-radius: 5px;
 }
 
-button:hover{
-    background-color: #ffad99;
+button:hover {
+    background-color: #01467A;
 }
 
-.chevron{
+.chevron {
     transform: translateY(0.4rem);
 }
 
-.itemsPerPage{
+.itemsPerPage {
     text-align: right;
     margin-bottom: 0.5rem;
 }
 
-#authorize_button{
-    margin: 0 5px;
+/* input border radius*/
+
+#inpEvent, #inpCategory, #dateInput, #timeInput {
+    border-radius: 5px;
+    border-color: #0146;
+}
+
+.flexContainer {
+    display: flex;
+    flex-wrap: nowrap;
+    margin: 0 -15px;
+}
+
+.panel {
+    margin: 0 15px;
+    width: 30%;
+}
+
+.calendar-wrapper {
+    margin: 0 15px;
+    width: 70%;
+}
+
+.fc-button {
+    padding: 0 5px!important;
+}
+
+.fc .fc-button{
+    font-size: 0.8em!important;
+}
+
+.table-wrapper {
+    overflow: auto;
+    width: 100%;
 }
 
 #eventManagePanel{
-    margin-top: 10px;
+    display: block;
+    overflow: auto;
 }
+
+#allCategory{
+    min-width: 330px;
+}
+
+#done{
+    min-width: 75px;
+}
+
+#date{
+    min-width: 160px;
+}
+
+#time{
+    min-width: 70px;
+}
+
+#nazva{
+    min-width: 330px;
+}
+
+#delete{
+    min-width: 110px;
+}
+
+@media screen and (max-width: 1200px) {
+    .fc .fc-toolbar{
+        flex-direction: column!important;
+    }
+}
+
+@media screen and (max-width: 992px) {
+    .flexContainer {
+        flex-wrap: wrap;
+    }
+    .panel {
+        order: 2;
+        width: 100%;
+    }
+    .calendar-wrapper {
+        order: 1;
+        width: 100%;
+        margin-bottom: 15px;
+    }
+
+}
+
+
+/* @media screen and (max-width: 767px){
+
+    #todoTable, .calendar{
+        margin-top: 1rem;
+    }
+}
+
+@media screen and (min-width:768px){
+
+    .todo-grid-parent{
+        display: grid;
+        grid-template-columns: 2fr 3fr;
+        column-gap: 1rem;
+    }
+
+    
+    
+    #calendar{
+        position: sticky;
+        top: 0;
+
+    }
+} */
