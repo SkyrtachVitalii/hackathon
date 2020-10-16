@@ -74,48 +74,6 @@ function todoMain() {
         
        addGoogleEvent(eventObj);
 
-        //Event add for google calendar
-    //     if (gapi.auth2.getAuthInstance().isSignedIn.get()) {
-    //         if (!eventObj.time) {
-    //             var event = {
-    //                 'summary': eventObj.name,
-    //                 'id': eventObj.id,
-    //                 'start': {
-    //                     'date': eventObj.date,
-    //                     'timeZone': 'Europe/Kiev',
-    //                 },
-    //                 'end': {
-    //                     'date': eventObj.date,  
-    //                     'timeZone': 'Europe/Kiev',
-    //                 },
-    //             }
-    //         }
-    //      else {
-    //         var event = {
-    //             'summary': eventObj.name,
-    //             'id': eventObj.id,
-    //             'start': {
-    //                 'dateTime': eventObj.date + 'T' + eventObj.time + ':00',
-    //                 'timeZone': 'Europe/Kiev',
-    //             },
-    //             'end': {
-    //                 'dateTime': eventObj.date + 'T' + eventObj.time + ':00',
-    //                 'timeZone': 'Europe/Kiev',
-    //             },
-    //         }
-    //     }
-    // // console.log(event);
-            
-    //         var request = gapi.client.calendar.events.insert({
-    //             'calendarId': CAL_ID,
-    //             'resource': event
-    //         })
-    //         request.execute()
-    //         // console.log('event pushed for gCal ' + event.id);
-    //     }
-        //-------------------------------------------------------------------
-
-
         //Render new event category
         if (inputValueEvent != '' && inputValueDate != '' && inputValueCategory != '' && inputValueTime != '') { //Запрещаем пустое событие
             renderEvent(eventObj)
