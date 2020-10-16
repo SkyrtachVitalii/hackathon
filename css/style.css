@@ -58,14 +58,14 @@ th, td {
 }
 
 input {
-    color: #1B3A56;
+    color:  #00467A;
 }
 
 h3 {
     color: #E2E9EF;
     font-family: "rowdies", cursive;
     padding: 1rem;
-    background-color: #01467A;
+    background-color:  #00467A;
     border-radius: 10px;
 }
 
@@ -75,10 +75,10 @@ body {
 }
 
 .todo-block {
-    border: 1px solid #01467A;
+    border: 1px solid  #00467A;
     padding: 1rem;
     border-radius: 20px;
-    color: #01467A;
+    color:  #00467A;
 }
 
 #date, #time, #nazva, #allCategory {
@@ -96,20 +96,45 @@ body {
 #done {
     background-color: green;
     color: white;
-    /* border-radius: 10px; */
+    min-width: 75px;
+}
+
+#nazva{
+    min-width: 280px;
+}
+
+
+#edit{
+    background-color: red;
+    color: white;
+    min-width: 110px;
 }
 
 #delete {
     background-color: red;
     color: white;
-    /* border-radius: 10px; */
+    min-width: 110px;
 }
+
+#allCategory{
+    min-width: 280px;
+}
+
+
+#date{
+    min-width: 160px;
+}
+
+#time{
+    min-width: 70px;
+}
+
 
 #todoTable {
     margin-top: 1rem;
 }
 
-.todo-overlay {
+/* .todo-overlay {
     width: 100vw;
     height: 100vh;
     background-color: #dddddd;
@@ -153,7 +178,7 @@ body {
 
 #todoTable tr:nth-child(even) {
     background-color: #ffd6cc;
-}
+} */
 
 button {
     background-color: #025B86;
@@ -193,6 +218,11 @@ button:hover {
     width: 30%;
 }
 
+.panel-popup{
+    width: 50%;
+    margin: 0 auto;
+}
+
 .calendar-wrapper {
     margin: 0 15px;
     width: 70%;
@@ -216,29 +246,8 @@ button:hover {
     overflow: auto;
 }
 
-#allCategory{
-    min-width: 330px;
-}
 
-#done{
-    min-width: 75px;
-}
 
-#date{
-    min-width: 160px;
-}
-
-#time{
-    min-width: 70px;
-}
-
-#nazva{
-    min-width: 330px;
-}
-
-#delete{
-    min-width: 110px;
-}
 
 @media screen and (max-width: 1200px) {
     .fc .fc-toolbar{
@@ -260,6 +269,13 @@ button:hover {
         margin-bottom: 15px;
     }
 
+}
+
+@media screen and (max-width: 768px) {
+
+    .fc .fc-daygrid-week-number{
+        display: none!important;
+    }
 }
 
 

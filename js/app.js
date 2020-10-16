@@ -13,7 +13,9 @@ function todoMain() {
         selectElem,
         eventList = [],
         calendar,
-        shortListBtn
+        shortListBtn,
+        changeBtn, 
+        closePopupBtn
 
 
     // App start
@@ -62,12 +64,14 @@ function todoMain() {
         const inputValueTime = timeInput.value
         timeInput.value = ''
 
+        console.log(inputValueDate)
+
         // Create obj for new event
         let eventObj = {
             id: _uuid(),
             name: inputValueEvent,
             category: inputValueCategory,
-            date: inputValueDate,
+            date: inputValueDate || '2020-01-01',
             time: inputValueTime,
             isDone: false,
         }
@@ -83,27 +87,26 @@ function todoMain() {
                         'timeZone': 'Europe/Kiev',
                     },
                     'end': {
-                        'date': eventObj.date,  
+                        'date': eventObj.date,
+                        'timeZone': 'Europe/Kiev',
+                    },
+                }
+            } else {
+                var event = {
+                    'summary': eventObj.name,
+                    'id': eventObj.id,
+                    'start': {
+                        'dateTime': eventObj.date + 'T' + eventObj.time + ':00',
+                        'timeZone': 'Europe/Kiev',
+                    },
+                    'end': {
+                        'dateTime': eventObj.date + 'T' + eventObj.time + ':00',
                         'timeZone': 'Europe/Kiev',
                     },
                 }
             }
-         else {
-            var event = {
-                'summary': eventObj.name,
-                'id': eventObj.id,
-                'start': {
-                    'dateTime': eventObj.date + 'T' + eventObj.time + ':00',
-                    'timeZone': 'Europe/Kiev',
-                },
-                'end': {
-                    'dateTime': eventObj.date + 'T' + eventObj.time + ':00',
-                    'timeZone': 'Europe/Kiev',
-                },
-            }
-        }
-    // console.log(event);
-            
+            // console.log(event);
+
             var request = gapi.client.calendar.events.insert({
                 'calendarId': CAL_ID,
                 'resource': event
@@ -115,9 +118,9 @@ function todoMain() {
 
 
         //Render new event category
-        if (inputValueEvent != '' && inputValueDate != '' && inputValueCategory != '' && inputValueTime != '') { //Запрещаем пустое событие
-            renderEvent(eventObj)
-        }
+
+        renderEvent(eventObj)
+
 
         //Add new event in array eventList
         eventList.push(eventObj)
@@ -127,6 +130,8 @@ function todoMain() {
 
         //Update filter options
         updateFilterOptions()
+
+        console.log(eventList)
     }
 
     function updateFilterOptions() {
@@ -204,7 +209,7 @@ function todoMain() {
         let eventDateCell = document.createElement('td')
 
         let eventDate = document.createElement('span')
-        eventDate.dataset.editable = true
+        // eventDate.dataset.editable = true
         eventDate.dataset.type = 'date'
         eventDate.dataset.value = date
         eventDate.dataset.id = id
@@ -224,9 +229,9 @@ function todoMain() {
         let eventTimeCell = document.createElement('td')
 
         let eventTime = document.createElement('span')
-        eventTime.dataset.editable = true
-        eventTime.dataset.type = 'time'
-        eventTime.dataset.id = id
+        // eventTime.dataset.editable = true
+        // eventTime.dataset.type = 'time'
+        // eventTime.dataset.id = id
 
         eventTime.innerText = time
         eventTimeCell.appendChild(eventTime)
@@ -237,9 +242,9 @@ function todoMain() {
         let eventNameCell = document.createElement('td')
 
         let eventName = document.createElement('span')
-        eventName.dataset.editable = true
-        eventName.dataset.type = 'name'
-        eventName.dataset.id = id
+        // eventName.dataset.editable = true
+        // eventName.dataset.type = 'name'
+        // eventName.dataset.id = id
 
         eventName.innerText = name
         eventNameCell.appendChild(eventName)
@@ -249,14 +254,25 @@ function todoMain() {
         let categoryNameCell = document.createElement('td')
 
         let categoryName = document.createElement('span')
-        categoryName.dataset.editable = true
-        categoryName.dataset.type = 'category'
-        categoryName.dataset.id = id
+        // categoryName.dataset.editable = true
+        // categoryName.dataset.type = 'category'
+        // categoryName.dataset.id = id
 
         categoryName.className = 'categoryName'
         categoryName.innerText = category
         categoryNameCell.appendChild(categoryName)
         eventRow.appendChild(categoryNameCell)
+
+        //Add a edit cell
+        let editCell = document.createElement('td')
+        let edit = document.createElement('i')
+        edit.dataset.id = id
+        edit.innerText = 'edit'
+        edit.className = 'material-icons'
+        edit.classList.add('showPopup')
+        edit.addEventListener('click', editEvent)
+        editCell.appendChild(edit)
+        eventRow.appendChild(editCell)
 
         //Add a basket cell
         let basketCell = document.createElement('td')
@@ -291,14 +307,14 @@ function todoMain() {
             calendar.getEventById(this.dataset.id).remove()
 
             // Event delete for google calendar
-                if (gapi.auth2.getAuthInstance().isSignedIn.get()) {
-                    var request = gapi.client.calendar.events.delete({
-                        'calendarId': CAL_ID,
-                        'eventId': this.dataset.id,
-                    })
-                    request.execute()
-                    // console.log('id for delete: ' + this.dataset.id);
-                }
+            if (gapi.auth2.getAuthInstance().isSignedIn.get()) {
+                var request = gapi.client.calendar.events.delete({
+                    'calendarId': CAL_ID,
+                    'eventId': this.dataset.id,
+                })
+                request.execute()
+                // console.log('id for delete: ' + this.dataset.id);
+            }
         }
 
         function doneEvent() {
@@ -310,6 +326,24 @@ function todoMain() {
             }
 
             saveEvent()
+        }
+
+        function editEvent(event) {
+            console.log('work')
+            const currentElemId = event.target.dataset.id
+            const currentElem = eventList.find(itemObj => itemObj.id == currentElemId)
+            let {
+                name,
+                category,
+                date,
+                time
+            } = currentElem
+            document.querySelector('#editName').value = name
+            document.querySelector('#editCategory').value = category
+            document.querySelector('#editDate').value = date
+            document.querySelector('#editTime').value = time
+
+            changeBtn.dataset.id = id
         }
 
     }
@@ -483,6 +517,89 @@ function todoMain() {
             updateFilterOptions()
         }
     }
+
+    let popup = new PopUp({
+        openBtn: 'showPopup',
+        container: 'popup',
+        reload: 'updatePopup',
+        content: ` <div class="panel panel-popup d-flex">
+        <div class="todo-input todo-block align-self-stretch w-100">
+            <span>Подія</span>
+            <input id="editName" type="text" >
+            <span>Категорія події:</span>
+            <input id="editCategory" type="text" list="categoryList">
+
+            <datalist id="popupCategoryList">
+                <option value="Особиста подія"></option>
+                <option value="Робоча подія"></option>
+                <option value="ВАЖЛИВО!"></option>
+            </datalist>
+            <span>Дата:</span>
+            <input type="date" id="editDate">
+
+            <span> Час:</span>
+            <input type="time" id="editTime">
+            <span></span>
+
+            <button id="changeBtn" class="updatePopup">Зберігти зміни</button>
+        </div>
+       
+    </div>`,
+        maskColor: `#1B3A56`,
+        maskOpacity: '0.9',
+    })
+
+    window.addEventListener('load', () => {
+        changeBtn = document.querySelector('#changeBtn')
+        closePopupBtn = document.querySelector('.showPopup-popupClose')
+        closePopupBtn.classList.add('updatePopup')
+        changeBtn.addEventListener('click', commitEdit)
+    })
+
+    function commitEdit(event) {
+
+        let id = event.target.dataset.id
+
+        let nameObj = document.querySelector('#editName').value
+        let category = document.querySelector('#editCategory').value
+        let dateObj = document.querySelector('#editDate').value
+        console.log("commitEdit -> dateObj", dateObj)
+        let time = document.querySelector('#editTime').value
+
+        calendar.getEventById(id).remove()
+
+        eventList.forEach(itemObj => {
+            if (itemObj.id == id) {
+
+                itemObj.id = id
+                itemObj.name = nameObj
+                itemObj.category = category
+                itemObj.time = time
+                itemObj.date = dateObj
+
+                addEventToCalendar({
+                    id: itemObj.id,
+                    title: itemObj.name,
+                    start: itemObj.date,
+                })
+
+            }
+        })
+
+
+        saveEvent()
+        clearEvents()
+        renderAllEvents(eventList)
+        updateFilterOptions()
+
+        
+
+        console.log(eventList)
+    }
+
+
+
+
 
 
     //код - Скиртач Віталій урок 20
