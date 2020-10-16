@@ -34,7 +34,7 @@
 
 <body>
 
-    <div class="container py-3">
+    <div id="main" class="container py-3">
 
         <div class="row my-3 px-3">
             <h3 class="w-100 text-center">Personal sheduling service</h3>
@@ -42,7 +42,7 @@
 
         <div class="flexContainer mb-3">
             <div class="panel d-flex">
-                <div class="todo-input todo-block align-self-stretch w-100">
+                <div id="k2"class="todo-input todo-block align-self-stretch w-100">
                     <span>Подія</span>
                     <input id="inpEvent" type="text" placeholder="Заплануйте нову подію">
                     <span>Категорія події:</span>
@@ -80,7 +80,7 @@
             </div>
 
             <div class="calendar-wrapper d-flex">
-                <div class="todo-calendar todo-block w-100">
+                <div id="k1" class="todo-calendar todo-block w-100">
                     <div id='calendar'></div>
                 </div>
             </div>
@@ -88,10 +88,10 @@
         </div>
 
         <table id="eventManagePanel" class="table-list">
-            <tr>
-                <th id="done">Виконано</th>
+            <tr id="k3">
+                <th id="edone">Виконано</th>
                 <th id="date">Дата події </th>
-                <th id="time">Час події</th>
+                <th id="tim">Час події</th>
                 <th id="nazva">Назва події</th>
                 <th id="allCategory">
                     <select id="categoryFilter">
