@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Personal Sheduling</title>
+    <title>Personal sheduling service</title>
 
     <!--Favicon-->
     <link rel="apple-touch-icon" sizes="180x180" href="./images/favicon/apple-touch-icon.png">
@@ -42,7 +42,6 @@
 
         <div class="flexContainer mb-3" >
             <div class="panel d-flex">
-                <!-- <div> -->
                     <div class="todo-input todo-block align-self-stretch w-100">
                         <span>Подія</span>
                         <input id="inpEvent" type="text" placeholder="Заплануйте нову подію">
@@ -78,7 +77,6 @@
         
                         <!-- <ul id="out"></ul> -->
                     </div>
-                <!-- </div> -->
             </div>
 
             <div class="calendar-wrapper d-flex">
@@ -89,7 +87,6 @@
             
         </div>
 
-        <!-- <div class="table-wrapper row my-3 px-3"> -->
             <table id="eventManagePanel" class="table-list ">
                 <tr>
                     <th id="done">Виконано</th>
@@ -120,6 +117,19 @@
     <!-- 
     <button id="authorize_button" style="display: none;">Authorize</button>
     <button id="signout_button" style="display: none;">Sign Out</button> -->
+        <!-- </div>
+        
+        <div class="todo-calendar todo-block">
+            <div id='calendar'></div>
+        </div> -->
+
+        
+
+    <button id="authorize_button" style="display: none;">Додати google календар</button>
+    <button id="signout_button" style="display: none;">Видалити google календар</button>
+    <span id="gmail" style="display: none;"></span>
+
+   
 
     <!-- <button id="authorize_button" style="display: none;">Додати google календар</button>
     <button id="signout_button" style="display: none;">Видалити google календар</button>
