@@ -9,7 +9,7 @@ FullCalendar.globalLocales.push(function () {
     },
     buttonText: {
       prev: "Попередній",
-      next: "далі",
+      next: "Далі",
       today: "Сьогодні",
       month: "Місяць",
       week: "Тиждень",
