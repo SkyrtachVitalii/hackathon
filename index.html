@@ -22,64 +22,78 @@
     <!-- Material Icon -->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
-    <!-- Fullcalendar cdn -->
-    <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@5.3.2/main.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.3.2/main.min.js"></script> -->
-    <!-- <script src='./fullcalendar-5.3.2/lib//locales/uk.js'></script> -- >
-
-    <!- FullCalendar local-->
+    <!-- FullCalendar local -->
     <link rel="stylesheet" href="./fullcalendar-5.3.2/lib/main.min.css">
-    <script src="fullcalendar-5.3.2/lib/main.min.js"></script>
-    <script defer src="js/app.js"></script>
+
+    <!-- Bootstrap 4 -->
+    <link rel="stylesheet" href="css/bootstrap.min.css">
 
     <!-- Own Styles -->
     <link rel="stylesheet" href="css/style.css">
 </head>
 
 <body>
-    <h3>Personal sheduling service</h3>
-    <div class="todo-grid-parent">
-        <div>
-            <div class="todo-input todo-block">
-                <span>Подія</span>
-                <input id="inpEvent" type="text" placeholder="Заплануйте нову подію">
-                <span>Категорія події:</span>
-                <input id="inpCategory" type="text" placeholder="Зазначте категорію події" list="categoryList"> 
-           
-               <datalist id="categoryList">
-                   <option value="Особиста подія"></option>
-                   <option value="Робоча подія"></option>
-                   <option value="ВАЖЛИВО!"></option>
-               </datalist>
-                <span>Дата:</span>
-               <input type="date" id="dateInput">
-               
-               <span> Час:</span>
-               <input type="time" id="timeInput">
-               <span></span>
-           
-               <button id="addBtn">Додати подію</button>
-                <span></span>
-               <button id="sortByDateBtn">Сортувати за датою</button>
 
-               <span></span>
-               <label><input id="shortListBtn" type="checkbox">Актуальні події напочатку</label>
+    <div class="container py-3">
 
-               <!-- <button id="authorize_button" style="display: none;">Authorize</button>
-               <button id="signout_button" style="display: none;">Sign Out</button> -->
-            <div>
-                <button id="authorize_button" style="display: none;">Додати Google Календар</button>
-                <button id="signout_button" style="display: none;">Видалити Google Календар</button>
-                <span id="gmail" style="display: none;"></span>
+        <div class="row my-3 px-3">
+            <h3 class="w-100 text-center">Personal sheduling service</h3>
+        </div>
+
+        <div class="flexContainer mb-3" >
+            <div class="panel d-flex">
+                <!-- <div> -->
+                    <div class="todo-input todo-block align-self-stretch w-100">
+                        <span>Подія</span>
+                        <input id="inpEvent" type="text" placeholder="Заплануйте нову подію">
+                        <span>Категорія події:</span>
+                        <input id="inpCategory" type="text" placeholder="Зазначте категорію події" list="categoryList">
+        
+                        <datalist id="categoryList">
+                            <option value="Особиста подія"></option>
+                            <option value="Робоча подія"></option>
+                            <option value="ВАЖЛИВО!"></option>
+                        </datalist>
+                        <span>Дата:</span>
+                        <input type="date" id="dateInput">
+        
+                        <span> Час:</span>
+                        <input type="time" id="timeInput">
+                        <span></span>
+        
+                        <button id="addBtn">Додати подію</button>
+                        <span></span>
+                        <button id="sortByDateBtn">Сортувати за датою</button>
+        
+                        <span></span>
+                        <label><input class="mr-3" id="shortListBtn" type="checkbox">Актуальні події напочатку</label>
+        
+                        <!-- <button id="authorize_button" style="display: none;">Authorize</button>
+                           <button id="signout_button" style="display: none;">Sign Out</button> -->
+                        <div>
+                            <button id="authorize_button" style="display: none;">Додати Google Календар</button>
+                            <button id="signout_button" style="display: none;">Видалити Google Календар</button>
+                            <span id="gmail" style="display: none;"></span>
+                        </div>
+        
+                        <!-- <ul id="out"></ul> -->
+                    </div>
+                <!-- </div> -->
             </div>
-           
-               <ul id="out"></ul>
+
+            <div class="calendar-wrapper d-flex">
+                <div class="todo-calendar todo-block w-100">
+                    <div id='calendar'></div>
+                </div>
             </div>
             
-            <table id="eventManagePanel" class="todo-block">
+        </div>
+
+        <!-- <div class="table-wrapper row my-3 px-3"> -->
+            <table id="eventManagePanel" class="table-list ">
                 <tr>
                     <th id="done">Виконано</th>
-                    <th id="date">Дата події  </th>
+                    <th id="date">Дата події </th>
                     <th id="time">Час події</th>
                     <th id="nazva">Назва події</th>
                     <th id="allCategory">
@@ -90,14 +104,20 @@
                     <th id="delete">Видалити подію</th>
                 </tr>
             </table>
-        </div>
-        
-        <div class="todo-calendar todo-block">
-            <div id='calendar'></div>
-        </div>
+        <!-- </div> -->
+
+        <!-- <div class="todo-grid-parent"> -->
+       
+        <!-- </div> -->
+
+       
+
+        <div id="popup"></div>
     </div>
 
-<!-- 
+
+
+    <!-- 
     <button id="authorize_button" style="display: none;">Authorize</button>
     <button id="signout_button" style="display: none;">Sign Out</button> -->
 
@@ -105,12 +125,14 @@
     <button id="signout_button" style="display: none;">Видалити google календар</button>
     <span id="gmail" style="display: none;"></span> -->
 
-    
+    <script defer src="fullcalendar-5.3.2/lib/main.min.js"></script>
+    <script defer src="fullcalendar-5.3.2/lib/locales/uk.js"></script>
+    <script defer src="js/app.js"></script>
 
     <script async defer src="https://apis.google.com/js/api.js" onload="this.onload=function(){};handleClientLoad()"
-    onreadystatechange="if (this.readyState === 'complete') this.onload()">
+        onreadystatechange="if (this.readyState === 'complete') this.onload()">
     </script>
-    <script src="./js/googlecalendar.js" type="text/javascript"></script>
+    <script defer src="./js/googlecalendar.js"></script>
 </body>
 
 </html>
