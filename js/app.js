@@ -283,8 +283,14 @@ function todoMain() {
                 if (eventList[i].id == this.dataset.id) {
                     eventList.splice(i, 1)
                 }
+            }
 
-                // Event delete for google calendar
+            saveEvent()
+
+            // Fullcalendar
+            calendar.getEventById(this.dataset.id).remove()
+
+            // Event delete for google calendar
                 if (gapi.auth2.getAuthInstance().isSignedIn.get()) {
                     var request = gapi.client.calendar.events.delete({
                         'calendarId': CAL_ID,
@@ -293,12 +299,6 @@ function todoMain() {
                     request.execute()
                     // console.log('id for delete: ' + this.dataset.id);
                 }
-            }
-
-            saveEvent()
-
-            // Fullcalendar
-            calendar.getEventById(this.dataset.id).remove()
         }
 
         function doneEvent() {
@@ -471,6 +471,8 @@ function todoMain() {
                         title: itemObj.name,
                         start: itemObj.date,
                     })
+                    updateGoogleEvent(itemObj);
+                    // console.log(itemObj);
                 }
             })
 

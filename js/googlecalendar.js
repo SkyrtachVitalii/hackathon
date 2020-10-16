@@ -54,7 +54,7 @@
                 signoutButton.style.display = 'block';
                 gmailInfo.style.display = 'block'
                 gmailInfo.innerHTML = gapi.auth2.getAuthInstance().currentUser.get().nt.Wt
-                gmailInfo.style.display = 'block'
+                // gmailInfo.style.display = 'block'
                 // console.log('signed gCal: ' + isSignedIn);
                 // console.log(gapi.auth2.getAuthInstance().currentUser.get().nt.Wt);   
             } else {
@@ -90,4 +90,4 @@
             // var textContent = document.createTextNode(message + '\n');
             // pre.appendChild(textContent);
             console.log(message);
-        }
+}

@@ -22,8 +22,8 @@ th, td {
 /* ===================================== Aleksandr ====================================== */
 
 
-@import url("https://fonts.googleapis.com/css2?family=Rowdies&family=Titillium+Web&display=swap");
-
+/* @import url("https://fonts.googleapis.com/css2?family=Rowdies&family=Titillium+Web&display=swap"); */
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed&display=swap');
 .todo-input{
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -47,45 +47,74 @@ th, td {
 }
 
 ::-ms-input-placeholder{
-    color: #ed6a5e;
+    color: #7EC2DC;
 }
 ::-webkit-input-placeholder{
-     color:#ed6a5e ;
+     color:#7EC2DC ;
 }
 
 ::placeholder{
-    color: #ed6a5e;
+    color: #7EC2DC;
+
 }
 
+
 input{
-    color: #a11e12;
+    color: #1B3A56;
+    
 }
 
 h3{
-    color: #a11e12;
+    color: #E2E9EF;
     font-family: "rowdies",cursive;
     padding: 1rem;
-    background-color: #ed6a5e;
+    background-color: #01467A;
+    border-radius: 10px;
 }
 body{
-    font-family:"Titillium Web", sans-serif;
+    /* font-family:"Titillium Web", sans-serif; */
+    font-family: 'Roboto Condensed', sans-serif;
     
 }
 
 
 
 .todo-block{
-    border: 1px solid #ff8e72;
+    border: 1px solid #01467A;
     padding:  1rem;
     border-radius: 20px;
-    color: #a11e12;
+    color: #01467A;
+}
+#date,#time,#nazva,#allCategory{
+    border-radius: 10px;
+    background-color:#00467A ;
+    color: white;
+}
+
+#categoryFilter{
+    background-color: #016986;
+    color: #FEFEFE;
+    border-radius: 10px;
+}
+
+
+#done{
+    background-color: green;
+color: white;
+border-radius: 10px;
+}
+
+#delete{
+    background-color: red;
+    color: white;
+    border-radius: 10px;
 }
 #todoTable{
     margin-top: 1rem;
 }
 @media screen and (max-width: 767px){
     /* for mobile or small device */
-    #todoTable, #calendar{
+    #todoTable, .calendar{
         margin-top: 1rem;
     }
 }
@@ -99,7 +128,7 @@ body{
     }
 
     
-
+    
     #calendar{
         position: sticky;
         top: 0;
@@ -154,13 +183,14 @@ body{
 }
 
 button{
-    background-color: #ffd6cc;
-    color: #a11e12;
-    border: 1px outset #ed6a5e;
+    background-color: #025B86;
+    color: #99CCD1;
+    border: 1px outset #01467A;
+    border-radius: 5px;
 }
 
 button:hover{
-    background-color: #ffad99;
+    background-color: #01467A;
 }
 
 .chevron{
@@ -171,11 +201,8 @@ button:hover{
     text-align: right;
     margin-bottom: 0.5rem;
 }
-
-#authorize_button{
-    margin: 0 5px;
-}
-
-#eventManagePanel{
-    margin-top: 10px;
+/* input border radius*/
+#inpEvent, #inpCategory, #dateInput, #timeInput{
+    border-radius: 5px;
+    border-color:#0146 ;
 }
