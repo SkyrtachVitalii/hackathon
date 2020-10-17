@@ -1,6 +1,6 @@
 function addGoogleEvent(eventObj) {
     if (gapi.auth2.getAuthInstance().isSignedIn.get()) {
-        if (!eventObj.time) {
+        if (!eventObj.timeStart) {
             var event = {
                 'summary': eventObj.name,
                 'id': eventObj.id,
@@ -19,16 +19,16 @@ function addGoogleEvent(eventObj) {
                 'summary': eventObj.name,
                 'id': eventObj.id,
                 'start': {
-                    'dateTime': eventObj.date + 'T' + eventObj.time + ':00',
+                    'dateTime': eventObj.date + 'T' + eventObj.timeStart + ':00',
                     'timeZone': 'Europe/Kiev',
                 },
                 'end': {
-                    'dateTime': eventObj.date + 'T' + eventObj.time + ':00',
+                    'dateTime': eventObj.date + 'T' + eventObj.timeEnd + ':00',
                     'timeZone': 'Europe/Kiev',
                 },
             }
         }
-        console.log('addGoogleEvent '+event);
+        console.log(event);
             
         var request = gapi.client.calendar.events.insert({
             'calendarId': CAL_ID,
@@ -71,5 +71,15 @@ function updateGoogleEvent(itemObj) {
             'resource': event
         })
         request.execute()
+    }
+}
+function removeGoogleEvent(eventId) {
+    if (gapi.auth2.getAuthInstance().isSignedIn.get()) {
+        var request = gapi.client.calendar.events.delete({
+            'calendarId': CAL_ID,
+            'eventId': eventId,
+        })
+        request.execute()
+        // console.log('id for delete: ' + this.dataset.id);
     }
 }

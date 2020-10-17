@@ -13,6 +13,7 @@ function todoMain() {
         addButton,
         date,
         eventClickId,
+        checkboxPopup,
         saveEvents,
         eventList = [],
         calendar,
@@ -47,12 +48,23 @@ function todoMain() {
         deleteButton = document.querySelector('#popUpDelete')
         saveButton = document.querySelector('#popUpSave')
         addButton = document.querySelector('#popUpAdd')
+        checkboxPopup = document.querySelector('#checkbox')
     }
    
     function addListeners() {
         saveButton.addEventListener('click', editEvent);
         deleteButton.addEventListener('click', deleteEvent)
-        addButton.addEventListener('click',addEvent)
+        addButton.addEventListener('click', addEvent)
+        checkboxPopup.addEventListener('change', setTimesShow)
+    }
+   function setTimesShow(){
+       if (checkboxPopup.checked) {
+           timeInputStart.style = "display: none";
+           timeInputEnd.style = "display: none";
+       } else {
+           timeInputStart.style = "display: initial";
+           timeInputEnd.style = "display: initial";
+       }
     }
     console.log(eventList)
          window.onclick = function (e) {
@@ -60,7 +72,12 @@ function todoMain() {
        } console.log(e.target)
         
     }
-
+    function clearInputs() {
+        inputTitle.value = ''
+        timeInputStart.value = ''
+        timeInputEnd.value = ''
+        inputText.value = ''
+}
     function addEvent() {
 
         //Get event name
@@ -78,8 +95,12 @@ function todoMain() {
         //Get time
         const inputValueTimeStart = timeInputStart.value
         timeInputStart.value = ''
+
         const inputValueTimeEnd = timeInputEnd.value
         timeInputEnd.value = ''
+
+        const inputTextEvent = inputText.value
+        inputText.value = ''
 
         // Create obj for new event
         let eventObj = {
@@ -89,6 +110,7 @@ function todoMain() {
             date: date || '2020-01-01',
             timeStart: inputValueTimeStart,
             timeEnd: inputValueTimeEnd,
+            text: inputTextEvent,
             isDone: false,
         }
         console.log(eventObj);
@@ -112,8 +134,8 @@ function todoMain() {
 
         //Update filter options
         // updateFilterOptions()
-pop.style.display = "none"; var close = document.getElementById("closePopup");
-        
+        pop.style.display = "none"; var close = document.getElementById("closePopup");
+        addGoogleEvent(eventObj);
     }
 
 
@@ -132,7 +154,7 @@ pop.style.display = "none"; var close = document.getElementById("closePopup");
     function renderAllEvents(arr) {
         arr.forEach(itemObj => {
             renderEvent(itemObj) //Деструктуризация
-            console.log(itemObj);
+            // console.log(itemObj);
         })
     }
 function renderEvent({
@@ -174,6 +196,7 @@ function renderEvent({
                     // console.log(itemObj);
                     timeInputStart.value = itemObj.timeStart;
                     timeInputEnd.value = itemObj.timeEnd;
+                    inputText.value = itemObj.text;
                     console.log(itemObj.timeStart);
                 }
         })
@@ -198,8 +221,12 @@ function renderEvent({
         //Get time
         const inputValueTimeStart = timeInputStart.value
         timeInputStart.value = ''
+
         const inputValueTimeEnd = timeInputEnd.value
         timeInputEnd.value = ''
+
+        const inputTextEvent = inputText.value
+        inputText.value = ''
 
 
             calendar.getEventById(eventId).remove()
@@ -212,6 +239,7 @@ function renderEvent({
                     itemObj.date = date;
                     itemObj.timeStart = inputValueTimeStart;
                     itemObj.timeEnd = inputValueTimeEnd;
+                    itemObj.text = inputTextEvent;
                     addEventToCalendar({
                         id: itemObj.id,
                         title: itemObj.name,
@@ -238,32 +266,14 @@ function renderEvent({
             saveEvent()
 
             // Fullcalendar
-            calendar.getEventById(eventClickId).remove()
+        calendar.getEventById(eventClickId).remove()
+        
+        removeGoogleEvent(eventClickId);
 
-            // Event delete for google calendar
-            if (gapi.auth2.getAuthInstance().isSignedIn.get()) {
-                var request = gapi.client.calendar.events.delete({
-                    'calendarId': CAL_ID,
-                    'eventId': this.dataset.id,
-                })
-                request.execute()
-                // console.log('id for delete: ' + this.dataset.id);
-        }
         pop.style.display = "none"; var close = document.getElementById("closePopup");
-        }
-    // let dateObj = new Date(date)
-    // const uaDate = dateObj.toLocaleString('uk-UA', {
-    //     day: 'numeric',
-    //     month: 'long',
-    //     year: 'numeric',
-    // })
 
-    // // Add event to calendar
-    // addEventToCalendar({
-    //     id: id,
-    //     title: name,
-    //     start: date,
-    // })
+        clearInputs();
+        }
 
     // function doneEvent() {
     //     eventRow.classList.toggle('strike')
@@ -323,12 +333,15 @@ function renderEvent({
                 addButton.style.display = "block";
                 saveButton.style.display = "none";
                 deleteButton.style.display = "none";
-                pop.style.display = "block"; var close = document.getElementById("closePopup");
+                pop.style.display = "block";
+                var close = document.getElementById("closePopup");
+                
                 close.onclick = function () {
                     pop.style.display = "none";
                     inputTitle.value = '';
                     timeInputStart.value = '';
                     timeInputEnd.value = '';
+                    inputText.value = '';
                 };
                 console.log(close);
                 let dateObj = new Date(info.date)
@@ -348,12 +361,15 @@ function renderEvent({
                 addButton.style.display = "none";
                 saveButton.style.display = "block";
                 deleteButton.style.display = "block";
-                pop.style.display = "block"; var close = document.getElementById("closePopup");
+                pop.style.display = "block";
+                var close = document.getElementById("closePopup");
+                
                 close.onclick = function () {
                     pop.style.display = "none";
                     inputTitle.value = '';
                     timeInputStart.value = '';
                     timeInputEnd.value = '';
+                    inputText.value = '';
                 };
                 let dateObj = new Date(info.event.start)
         const uaDate = dateObj.toLocaleString('ru-RU', {
@@ -406,64 +422,6 @@ function renderEvent({
         // Fullcalendar
         calendar.getEvents().forEach(event => event.remove())
     }
-    // saveEvent()
-    // clearEvents()
-    // renderAllEvents(eventList)
-    // updateFilterOptions()
-        
-    
-
-    
-
-
-    // window.addEventListener('load', () => {
-    //     changeBtn = document.querySelector('#changeBtn')
-    //     closePopupBtn = document.querySelector('.showPopup-popupClose')
-    //     closePopupBtn.classList.add('updatePopup')
-    //     changeBtn.addEventListener('click', commitEdit)
-    // })
-
-    function commitEdit(event) {
-
-        let id = event.target.dataset.id
-
-        let nameObj = document.querySelector('#editName').value
-        let category = document.querySelector('#editCategory').value
-        let dateObj = document.querySelector('#editDate').value
-        console.log("commitEdit -> dateObj", dateObj)
-        let time = document.querySelector('#editTime').value
-
-        calendar.getEventById(id).remove()
-
-        eventList.forEach(itemObj => {
-            if (itemObj.id == id) {
-
-                itemObj.id = id
-                itemObj.name = nameObj
-                itemObj.category = category
-                itemObj.time = time
-                itemObj.date = dateObj
-
-                addEventToCalendar({
-                    id: itemObj.id,
-                    title: itemObj.name,
-                    start: itemObj.date,
-                })
-
-            }
-        })
-
-
-        saveEvent()
-        clearEvents()
-        renderAllEvents(eventList)
-        updateFilterOptions()
-
-        
-
-        console.log(eventList)
-    }
-
 
 
 
