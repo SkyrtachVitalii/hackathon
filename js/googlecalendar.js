@@ -12,7 +12,7 @@
 
         var authorizeButton = document.getElementById('authorize_button');
         var signoutButton = document.getElementById('signout_button');
-        var gmailInfo = document.getElementById('gmail');
+        // var gmailInfo = document.getElementById('gmail');
         
         /**
          *  On load, called to load the auth2 library and API client library.
@@ -52,15 +52,15 @@
             if (isSignedIn) {
                 authorizeButton.style.display = 'none';
                 signoutButton.style.display = 'block';
-                gmailInfo.style.display = 'block'
-                gmailInfo.innerHTML = gapi.auth2.getAuthInstance().currentUser.get().nt.Wt
+                // gmailInfo.style.display = 'none'
+                // gmailInfo.innerHTML = gapi.auth2.getAuthInstance().currentUser.get().nt.Wt
                 // gmailInfo.style.display = 'block'
                 // console.log('signed gCal: ' + isSignedIn);
                 // console.log(gapi.auth2.getAuthInstance().currentUser.get().nt.Wt);   
             } else {
                 authorizeButton.style.display = 'block';
                 signoutButton.style.display = 'none';
-                gmailInfo.style.display = 'none';
+                // gmailInfo.style.display = 'none';
                 // console.log('signed gCal: ' + isSignedIn); 
             }
         }
