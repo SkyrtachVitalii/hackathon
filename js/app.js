@@ -3,123 +3,105 @@ todoMain()
 
 function todoMain() {
 
-    let inputElemEvent,
-        inputElemCategory,
-        dateInput,
-        timeInput,
-        addBtn,
-        sortByDateBtn,
-        managePanel,
-        selectElem,
+    let inputTitle,
+        inputText,
+        selectedDate,
+        timeInputStart,
+        timeInputEnd,
+        deleteButton,
+        saveButton,
+        addButton,
+        date,
+        eventClickId,
+        saveEvents,
         eventList = [],
         calendar,
-        shortListBtn,
-        changeBtn, 
+        changeBtn,
         closePopupBtn
+    var pop = document.getElementById("zatemnenie");
 
-
+    
+    
     // App start
     getElements()
     addListeners()
     initCalendar()
     loadEvents()
     renderAllEvents(eventList)
-    updateFilterOptions()
+    calendarDate()
+    // updateFilterOptions()
 
+    // function addListeners() {
+    //     addBtn.addEventListener('click', addEvent)
+    //     sortByDateBtn.addEventListener('click', sortEventListByDate)
+    //     selectElem.addEventListener('change', multipleFilter)
+    //     shortListBtn.addEventListener('change', multipleFilter)
+    //     managePanel.addEventListener('click', managePanelReduct)
+    // }
     function getElements() {
-        inputElemEvent = document.querySelector('#inpEvent')
-        inputElemCategory = document.querySelector('#inpCategory')
-        dateInput = document.querySelector('#dateInput')
-        timeInput = document.querySelector('#timeInput')
-        addBtn = document.querySelector('#addBtn')
-        sortByDateBtn = document.querySelector('#sortByDateBtn')
-        managePanel = document.querySelector('#eventManagePanel')
-        selectElem = document.querySelector('#categoryFilter')
-        shortListBtn = document.querySelector('#shortListBtn')
+        inputTitle = document.querySelector('#inpTitle')
+        inputText = document.querySelector('#inpText')
+        selectedDate = document.querySelector('#datePopup')
+        timeInputStart = document.querySelector('#timeInputStart')
+        timeInputEnd = document.querySelector('#timeInputEnd')
+        deleteButton = document.querySelector('#popUpDelete')
+        saveButton = document.querySelector('#popUpSave')
+        addButton = document.querySelector('#popUpAdd')
     }
-
+   
     function addListeners() {
-        addBtn.addEventListener('click', addEvent)
-        sortByDateBtn.addEventListener('click', sortEventListByDate)
-        selectElem.addEventListener('change', multipleFilter)
-        shortListBtn.addEventListener('change', multipleFilter)
-        managePanel.addEventListener('click', managePanelReduct)
+        saveButton.addEventListener('click', editEvent);
+        deleteButton.addEventListener('click', deleteEvent)
+        addButton.addEventListener('click',addEvent)
+    }
+    console.log(eventList)
+         window.onclick = function (e) {
+        if(e.target == zatemnenie){pop.style.display = "none";
+       } console.log(e.target)
+        
     }
 
     function addEvent() {
 
         //Get event name
-        const inputValueEvent = inputElemEvent.value
-        inputElemEvent.value = ''
+        const inputTitleEvent = inputTitle.value
+        inputTitle.value = ''
 
         //Get event category
-        const inputValueCategory = inputElemCategory.value
-        inputElemCategory.value = ''
+        // const inputValueCategory = inputElemCategory.value
+        // inputElemCategory.value = ''
 
         //Get date
-        const inputValueDate = dateInput.value
-        dateInput.value = ''
+        // const inputValueDate = dateInput.value
+        // dateInput.value = ''
 
         //Get time
-        const inputValueTime = timeInput.value
-        timeInput.value = ''
-
-        console.log(inputValueDate)
+        const inputValueTimeStart = timeInputStart.value
+        timeInputStart.value = ''
+        const inputValueTimeEnd = timeInputEnd.value
+        timeInputEnd.value = ''
 
         // Create obj for new event
         let eventObj = {
             id: _uuid(),
-            name: inputValueEvent,
-            category: inputValueCategory,
-            date: inputValueDate || '2020-01-01',
-            time: inputValueTime,
+            name: inputTitleEvent,
+            // category: inputValueCategory,
+            date: date || '2020-01-01',
+            timeStart: inputValueTimeStart,
+            timeEnd: inputValueTimeEnd,
             isDone: false,
         }
-
-        //Event add for google calendar
-        if (gapi.auth2.getAuthInstance().isSignedIn.get()) {
-            if (!eventObj.time) {
-                var event = {
-                    'summary': eventObj.name,
-                    'id': eventObj.id,
-                    'start': {
-                        'date': eventObj.date,
-                        'timeZone': 'Europe/Kiev',
-                    },
-                    'end': {
-                        'date': eventObj.date,
-                        'timeZone': 'Europe/Kiev',
-                    },
-                }
-            } else {
-                var event = {
-                    'summary': eventObj.name,
-                    'id': eventObj.id,
-                    'start': {
-                        'dateTime': eventObj.date + 'T' + eventObj.time + ':00',
-                        'timeZone': 'Europe/Kiev',
-                    },
-                    'end': {
-                        'dateTime': eventObj.date + 'T' + eventObj.time + ':00',
-                        'timeZone': 'Europe/Kiev',
-                    },
-                }
-            }
-            // console.log(event);
-
-            var request = gapi.client.calendar.events.insert({
-                'calendarId': CAL_ID,
-                'resource': event
-            })
-            request.execute()
-            // console.log('event pushed for gCal ' + event.id);
-        }
-        //-------------------------------------------------------------------
-
+        console.log(eventObj);
+         addEventToCalendar({
+                    id: eventObj.id,
+                    title: eventObj.name,
+                    start: eventObj.date,
+                })
 
         //Render new event category
 
-        renderEvent(eventObj)
+        // renderEvent(eventObj)
+        
 
 
         //Add new event in array eventList
@@ -129,33 +111,11 @@ function todoMain() {
         saveEvent()
 
         //Update filter options
-        updateFilterOptions()
-
-        console.log(eventList)
+        // updateFilterOptions()
+pop.style.display = "none"; var close = document.getElementById("closePopup");
+        
     }
 
-    function updateFilterOptions() {
-        let filters = ['Всі категорії'] //by default
-
-        const events = Array.from(document.querySelectorAll('table>tr'))
-
-        events.forEach((item) => {
-            const category = item.querySelector('.categoryName').innerText
-            filters.push(category)
-        })
-
-        let filterSet = new Set(filters)
-
-        selectElem.innerHTML = ''
-
-        for (let item of filterSet) {
-            let customFilterElem = document.createElement('option')
-            customFilterElem.value = item
-            customFilterElem.innerText = item
-            selectElem.appendChild(customFilterElem)
-        }
-
-    }
 
     function saveEvent() {
         const stringified = JSON.stringify(eventList)
@@ -169,14 +129,13 @@ function todoMain() {
             eventList = []
         }
     }
-
     function renderAllEvents(arr) {
         arr.forEach(itemObj => {
             renderEvent(itemObj) //Деструктуризация
+            console.log(itemObj);
         })
     }
-
-    function renderEvent({
+function renderEvent({
         id,
         name,
         category,
@@ -185,105 +144,6 @@ function todoMain() {
         isDone,
     }) { //Деструктуризация
 
-        //Add a new event (row)
-        let eventRow = document.createElement('tr')
-        managePanel.appendChild(eventRow)
-
-        //Add a checkbox cell
-        let checkboxCell = document.createElement('td')
-        let checkboxElem = document.createElement('input')
-        checkboxElem.type = 'checkbox'
-        checkboxElem.addEventListener('click', doneEvent)
-        checkboxElem.dataset.id = id
-        if (isDone) {
-            eventRow.classList.add('strike')
-            checkboxElem.checked = true
-        } else {
-            eventRow.classList.remove('strike')
-            checkboxElem.checked = false
-        }
-        checkboxCell.appendChild(checkboxElem)
-        eventRow.appendChild(checkboxCell)
-
-        //Add a date cell
-        let eventDateCell = document.createElement('td')
-
-        let eventDate = document.createElement('span')
-        // eventDate.dataset.editable = true
-        eventDate.dataset.type = 'date'
-        eventDate.dataset.value = date
-        eventDate.dataset.id = id
-
-        let dateObj = new Date(date)
-        const uaDate = dateObj.toLocaleString('uk-UA', {
-            day: 'numeric',
-            month: 'long',
-            year: 'numeric',
-        })
-
-        eventDate.innerText = uaDate
-        eventDateCell.appendChild(eventDate)
-        eventRow.appendChild(eventDateCell)
-
-        //Add a time cell
-        let eventTimeCell = document.createElement('td')
-
-        let eventTime = document.createElement('span')
-        // eventTime.dataset.editable = true
-        // eventTime.dataset.type = 'time'
-        // eventTime.dataset.id = id
-
-        eventTime.innerText = time
-        eventTimeCell.appendChild(eventTime)
-        eventRow.appendChild(eventTimeCell)
-
-
-        //Add a eventname cell
-        let eventNameCell = document.createElement('td')
-
-        let eventName = document.createElement('span')
-        // eventName.dataset.editable = true
-        // eventName.dataset.type = 'name'
-        // eventName.dataset.id = id
-
-        eventName.innerText = name
-        eventNameCell.appendChild(eventName)
-        eventRow.appendChild(eventNameCell)
-
-        //Add a categoryname cell
-        let categoryNameCell = document.createElement('td')
-
-        let categoryName = document.createElement('span')
-        // categoryName.dataset.editable = true
-        // categoryName.dataset.type = 'category'
-        // categoryName.dataset.id = id
-
-        categoryName.className = 'categoryName'
-        categoryName.innerText = category
-        categoryNameCell.appendChild(categoryName)
-        eventRow.appendChild(categoryNameCell)
-
-        //Add a edit cell
-        let editCell = document.createElement('td')
-        let edit = document.createElement('i')
-        edit.dataset.id = id
-        edit.innerText = 'edit'
-        edit.className = 'material-icons'
-        edit.classList.add('showPopup')
-        edit.addEventListener('click', editEvent)
-        editCell.appendChild(edit)
-        eventRow.appendChild(editCell)
-
-        //Add a basket cell
-        let basketCell = document.createElement('td')
-        let basket = document.createElement('i')
-        basket.dataset.id = id
-        basket.innerText = 'delete'
-        basket.className = 'material-icons'
-        basket.addEventListener('click', deleteEvent)
-        basketCell.appendChild(basket)
-        eventRow.appendChild(basketCell)
-
         //Add event to calendar
         addEventToCalendar({
             id: id,
@@ -291,31 +151,7 @@ function todoMain() {
             start: date,
         })
 
-        function deleteEvent() {
-            eventRow.remove() // Замыкание!!!
-            updateFilterOptions()
-
-            for (let i = 0; i < eventList.length; i++) {
-                if (eventList[i].id == this.dataset.id) {
-                    eventList.splice(i, 1)
-                }
-            }
-
-            saveEvent()
-
-            // Fullcalendar
-            calendar.getEventById(this.dataset.id).remove()
-
-            // Event delete for google calendar
-            if (gapi.auth2.getAuthInstance().isSignedIn.get()) {
-                var request = gapi.client.calendar.events.delete({
-                    'calendarId': CAL_ID,
-                    'eventId': this.dataset.id,
-                })
-                request.execute()
-                // console.log('id for delete: ' + this.dataset.id);
-            }
-        }
+        
 
         function doneEvent() {
             eventRow.classList.toggle('strike')
@@ -328,25 +164,117 @@ function todoMain() {
             saveEvent()
         }
 
-        function editEvent(event) {
-            console.log('work')
-            const currentElemId = event.target.dataset.id
-            const currentElem = eventList.find(itemObj => itemObj.id == currentElemId)
-            let {
-                name,
-                category,
-                date,
-                time
-            } = currentElem
-            document.querySelector('#editName').value = name
-            document.querySelector('#editCategory').value = category
-            document.querySelector('#editDate').value = date
-            document.querySelector('#editTime').value = time
-
-            changeBtn.dataset.id = id
-        }
+        
 
     }
+    function fillInput() {
+        eventList.forEach(itemObj => {
+                if (itemObj.id === eventClickId) {
+                    // updateGoogleEvent(itemObj);
+                    // console.log(itemObj);
+                    timeInputStart.value = itemObj.timeStart;
+                    timeInputEnd.value = itemObj.timeEnd;
+                    console.log(itemObj.timeStart);
+                }
+        })
+        
+        
+    
+}
+    function editEvent(event) {
+        const eventId = eventClickId;
+        //Get event name
+        const inputTitleEvent = inputTitle.value
+        inputTitle.value = ''
+
+        //Get event category
+        // const inputValueCategory = inputElemCategory.value
+        // inputElemCategory.value = ''
+
+        //Get date
+        // const inputValueDate = dateInput.value
+        // dateInput.value = ''
+
+        //Get time
+        const inputValueTimeStart = timeInputStart.value
+        timeInputStart.value = ''
+        const inputValueTimeEnd = timeInputEnd.value
+        timeInputEnd.value = ''
+
+
+            calendar.getEventById(eventId).remove()
+
+            eventList.forEach(itemObj => {
+                if (itemObj.id === eventId) {
+                    // itemObj.name = newEventName
+                    itemObj.id = eventClickId;
+                    itemObj.name = inputTitleEvent;
+                    itemObj.date = date;
+                    itemObj.timeStart = inputValueTimeStart;
+                    itemObj.timeEnd = inputValueTimeEnd;
+                    addEventToCalendar({
+                        id: itemObj.id,
+                        title: itemObj.name,
+                        start: itemObj.date,
+                    })
+                    updateGoogleEvent(itemObj);
+                    // console.log(itemObj);
+                }
+            })
+
+            saveEvent()
+            clearEvents()
+        renderAllEvents(eventList)
+        pop.style.display = "none"; var close = document.getElementById("closePopup");
+        }
+    function deleteEvent() {
+
+            for (let i = 0; i < eventList.length; i++) {
+                if (eventList[i].id == eventClickId) {
+                    eventList.splice(i, 1)
+                }
+            }
+
+            saveEvent()
+
+            // Fullcalendar
+            calendar.getEventById(eventClickId).remove()
+
+            // Event delete for google calendar
+            if (gapi.auth2.getAuthInstance().isSignedIn.get()) {
+                var request = gapi.client.calendar.events.delete({
+                    'calendarId': CAL_ID,
+                    'eventId': this.dataset.id,
+                })
+                request.execute()
+                // console.log('id for delete: ' + this.dataset.id);
+        }
+        pop.style.display = "none"; var close = document.getElementById("closePopup");
+        }
+    // let dateObj = new Date(date)
+    // const uaDate = dateObj.toLocaleString('uk-UA', {
+    //     day: 'numeric',
+    //     month: 'long',
+    //     year: 'numeric',
+    // })
+
+    // // Add event to calendar
+    // addEventToCalendar({
+    //     id: id,
+    //     title: name,
+    //     start: date,
+    // })
+
+    // function doneEvent() {
+    //     eventRow.classList.toggle('strike')
+    //     for (let item of eventList) {
+    //         if (item.id == this.dataset.id) {
+    //             item.isDone = !item.isDone
+    //         }
+    //     }
+
+    //     saveEvent()
+    // }
 
     function _uuid() {
         var d = Date.now()
@@ -361,36 +289,83 @@ function todoMain() {
     }
     // xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx
 
-    function sortEventListByDate() {
-        eventList.sort((a, b) => {
-            const aDate = Date.parse(a.date)
-            const bDate = Date.parse(b.date)
-            return aDate - bDate
-        })
+    // function sortEventListByDate() {
+    //     eventList.sort((a, b) => {
+    //         const aDate = Date.parse(a.date)
+    //         const bDate = Date.parse(b.date)
+    //         return aDate - bDate
+    //     })
 
-        saveEvent()
-        clearEvents()
-        renderAllEvents(eventList)
-        updateFilterOptions()
-    }
+    //     saveEvent()
+    //     clearEvents()
+    //     renderAllEvents(eventList)
+    //     updateFilterOptions()
+    // }
+    
 
+   
     function initCalendar() {
         var calendarEl = document.getElementById('calendar');
-
+        
         calendar = new FullCalendar.Calendar(calendarEl, {
-            headerToolbar: {
-                left: 'prev,next today',
-                center: 'title',
-                right: 'dayGridMonth,timeGridWeek,timeGridDay,listMonth'
-            },
+            headerToolbar: false,
+            dayHeaderFormat :{ weekday: 'long'},
             locale: 'uk',
             contentHeight: 'auto',
             buttonIcons: false, // show the prev/next text
-            weekNumbers: true,
-            navLinks: true, // can click day/week names to navigate views
+            weekNumbers: false,
+            navLinks: false, // can click day/week names to navigate viewsgit
             editable: true,
             dayMaxEvents: true, // allow "more" link when too many events
             events: [],
+            dateClick: function (info) {
+                date = info.dateStr;
+                addButton.style.display = "block";
+                saveButton.style.display = "none";
+                deleteButton.style.display = "none";
+                pop.style.display = "block"; var close = document.getElementById("closePopup");
+                close.onclick = function () {
+                    pop.style.display = "none";
+                    inputTitle.value = '';
+                    timeInputStart.value = '';
+                    timeInputEnd.value = '';
+                };
+                console.log(close);
+                let dateObj = new Date(info.date)
+        const uaDate = dateObj.toLocaleString('ru-RU', {
+            day: 'numeric',
+            month: 'long',
+            year: 'numeric',
+            weekday: 'long',
+        })
+                document.getElementById('datePopup').innerHTML = uaDate;
+            },
+            eventClick: function (info) {
+                date = info.event.startStr;
+                inputTitle.value = info.event.title;
+                eventClickId = info.event.id;
+                fillInput();
+                addButton.style.display = "none";
+                saveButton.style.display = "block";
+                deleteButton.style.display = "block";
+                pop.style.display = "block"; var close = document.getElementById("closePopup");
+                close.onclick = function () {
+                    pop.style.display = "none";
+                    inputTitle.value = '';
+                    timeInputStart.value = '';
+                    timeInputEnd.value = '';
+                };
+                let dateObj = new Date(info.event.start)
+        const uaDate = dateObj.toLocaleString('ru-RU', {
+            day: 'numeric',
+            month: 'long',
+            year: 'numeric',
+            weekday: 'long',
+        })
+                document.getElementById('datePopup').innerHTML = uaDate;
+                console.log("clicked event date:" + date);
+                
+            }
 
 
             //код - Віталій Скиртач
@@ -401,7 +376,20 @@ function todoMain() {
         });
 
         calendar.render();
+        
+        // console.log(calendar.getDate());
 
+    }
+    function calendarDate(date) {
+        let dateObj = new Date(calendar.getDate())
+        const uaDate = dateObj.toLocaleString('ru-RU', {
+            // day: 'numeric',
+            month: 'long',
+            year: 'numeric',
+            // weekday: 'long',
+        })
+        document.getElementById('dateCalendar').innerHTML = uaDate;
+        console.log(uaDate);   
     }
 
     function addEventToCalendar(event) {
@@ -418,143 +406,22 @@ function todoMain() {
         // Fullcalendar
         calendar.getEvents().forEach(event => event.remove())
     }
+    // saveEvent()
+    // clearEvents()
+    // renderAllEvents(eventList)
+    // updateFilterOptions()
+        
+    
 
-    function multipleFilter() {
-        clearEvents()
+    
 
-        if (selectElem.value === 'Всі категорії') {
-            if (shortListBtn.checked) {
-                let filteredIncompleteArr = eventList.filter(obj => obj.isDone === false)
-                renderAllEvents(filteredIncompleteArr)
-                let filteredCompleteArr = eventList.filter(obj => obj.isDone === true)
-                renderAllEvents(filteredCompleteArr)
-            } else {
-                renderAllEvents(eventList)
-            }
-        } else {
-            let filteredCategoryArr = eventList.filter(obj => obj.category === selectElem.value)
 
-            if (shortListBtn.checked) {
-                let filteredIncompleteArr = filteredCategoryArr.filter(obj => obj.isDone === false)
-                console.log("multipleFilter -> filteredIncompleteArr", filteredIncompleteArr)
-
-                if (filteredIncompleteArr.length == 0) {
-                    let eventRow = document.createElement('tr')
-                    managePanel.appendChild(eventRow)
-                    let eventMessageCell = document.createElement('td')
-                    eventMessageCell.setAttribute('colspan', '6')
-                    let eventMessage = document.createElement('span')
-                    eventMessage.innerText = 'У Вас немає актуальних подій за обраною категорією'
-                    eventMessageCell.appendChild(eventMessage)
-                    eventRow.appendChild(eventMessageCell)
-                } else {
-                    renderAllEvents(filteredIncompleteArr)
-                }
-
-                let filteredCompleteArr = filteredCategoryArr.filter(obj => obj.isDone === true)
-                renderAllEvents(filteredCompleteArr)
-
-            } else {
-                renderAllEvents(filteredCategoryArr)
-            }
-        }
-
-    }
-
-    function managePanelReduct(event) {
-        if (event.target.matches('span') && event.target.dataset.editable == 'true') {
-            let tempInputElem
-            switch (event.target.dataset.type) {
-                case 'date':
-                    tempInputElem = document.createElement('input')
-                    tempInputElem.type = 'date'
-                    tempInputElem.value = event.target.dataset.value
-                    break
-                case 'time':
-                    tempInputElem = document.createElement('input')
-                    tempInputElem.type = 'time'
-                    tempInputElem.value = event.target.innerText
-                    break
-                case 'name':
-                    tempInputElem = document.createElement('input')
-                    tempInputElem.type = 'text'
-                    tempInputElem.value = event.target.innerText
-                    break
-                case 'category':
-                    tempInputElem = document.createElement('input')
-                    tempInputElem.type = 'text'
-                    tempInputElem.value = event.target.innerText
-                    break
-            }
-            tempInputElem.addEventListener('change', addNewEventData)
-            event.target.innerText = ''
-            event.target.appendChild(tempInputElem)
-        }
-
-        function addNewEventData(event) {
-            const newEventData = event.target.value
-            const eventId = event.target.parentNode.dataset.id
-
-            calendar.getEventById(eventId).remove()
-
-            eventList.forEach(itemObj => {
-                if (itemObj.id === eventId) {
-                    // itemObj.name = newEventName
-                    itemObj[event.target.parentNode.dataset.type] = newEventData
-                    addEventToCalendar({
-                        id: itemObj.id,
-                        title: itemObj.name,
-                        start: itemObj.date,
-                    })
-                    updateGoogleEvent(itemObj);
-                    // console.log(itemObj);
-                }
-            })
-
-            saveEvent()
-            clearEvents()
-            renderAllEvents(eventList)
-            updateFilterOptions()
-        }
-    }
-
-    let popup = new PopUp({
-        openBtn: 'showPopup',
-        container: 'popup',
-        reload: 'updatePopup',
-        content: ` <div class="panel panel-popup d-flex">
-        <div class="todo-input todo-block align-self-stretch w-100">
-            <span>Подія</span>
-            <input id="editName" type="text" >
-            <span>Категорія події:</span>
-            <input id="editCategory" type="text" list="categoryList">
-
-            <datalist id="popupCategoryList">
-                <option value="Особиста подія"></option>
-                <option value="Робоча подія"></option>
-                <option value="ВАЖЛИВО!"></option>
-            </datalist>
-            <span>Дата:</span>
-            <input type="date" id="editDate">
-
-            <span> Час:</span>
-            <input type="time" id="editTime">
-            <span></span>
-
-            <button id="changeBtn" class="updatePopup">Зберігти зміни</button>
-        </div>
-       
-    </div>`,
-        maskColor: `#1B3A56`,
-        maskOpacity: '0.9',
-    })
-
-    window.addEventListener('load', () => {
-        changeBtn = document.querySelector('#changeBtn')
-        closePopupBtn = document.querySelector('.showPopup-popupClose')
-        closePopupBtn.classList.add('updatePopup')
-        changeBtn.addEventListener('click', commitEdit)
-    })
+    // window.addEventListener('load', () => {
+    //     changeBtn = document.querySelector('#changeBtn')
+    //     closePopupBtn = document.querySelector('.showPopup-popupClose')
+    //     closePopupBtn.classList.add('updatePopup')
+    //     changeBtn.addEventListener('click', commitEdit)
+    // })
 
     function commitEdit(event) {
 
@@ -596,8 +463,6 @@ function todoMain() {
 
         console.log(eventList)
     }
-
-
 
 
 
