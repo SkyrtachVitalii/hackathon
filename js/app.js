@@ -19,32 +19,128 @@ function todoMain() {
 
 
     // App start
-    getElements()
-    addListeners()
-    initCalendar()
-    loadEvents()
-    renderAllEvents(eventList)
-    updateFilterOptions()
+    // getElements()
+    // addListeners()
 
-    function getElements() {
-        inputElemEvent = document.querySelector('#inpEvent')
-        inputElemCategory = document.querySelector('#inpCategory')
-        dateInput = document.querySelector('#dateInput')
-        timeInput = document.querySelector('#timeInput')
-        addBtn = document.querySelector('#addBtn')
-        sortByDateBtn = document.querySelector('#sortByDateBtn')
-        managePanel = document.querySelector('#eventManagePanel')
-        selectElem = document.querySelector('#categoryFilter')
-        shortListBtn = document.querySelector('#shortListBtn')
-    }
+    let popupAddEvent = new PopUp({
+        openBtn: 'start',
+        container: 'addEvent',
+        // reload: 'updatePopup-popupAddEvent',
+        content: `<div class="panel d-flex">
+        <div class="todo-input todo-block align-self-stretch w-100">
+            <span>Подія</span>
+            <input id="inpEvent" type="text" placeholder="Заплануйте нову подію">
+            <span>Категорія події:</span>
+            <input id="inpCategory" type="text" placeholder="Зазначте категорію події" list="categoryList">
 
-    function addListeners() {
-        addBtn.addEventListener('click', addEvent)
-        sortByDateBtn.addEventListener('click', sortEventListByDate)
-        selectElem.addEventListener('change', multipleFilter)
-        shortListBtn.addEventListener('change', multipleFilter)
-        managePanel.addEventListener('click', managePanelReduct)
-    }
+            <datalist id="categoryList">
+                <option value="Особиста подія"></option>
+                <option value="Робоча подія"></option>
+                <option value="ВАЖЛИВО!"></option>
+            </datalist>
+            <span>Дата:</span>
+            <input type="date" id="dateInput">
+
+            <span> Час:</span>
+            <input type="time" id="timeInput">
+            <span></span>
+
+            <button id="addBtn" class="addBtn updatePopup-popupAddEvent">Додати подію</button>
+            <span></span>
+            <button id="sortByDateBtn">Сортувати за датою</button>
+
+            <span></span>
+            <label><input class="mr-3" id="shortListBtn" type="checkbox">Актуальні події напочатку</label>
+
+        </div>
+    </div>`,
+        maskColor: `#fff`,
+        maskOpacity: '0.01',
+    })
+
+//     document.addEventListener('click', function(event){
+// console.log(event.target)
+//     })
+
+
+
+    let popup = new PopUp({
+        // openBtn: 'showPopup',
+        openBtn: 'start2',
+        container: 'popup',
+        reload: 'updatePopup',
+        content: ` <div class="panel panel-popup d-flex">
+        <div class="todo-input todo-block align-self-stretch w-100">
+            <span>Подія</span>
+            <input id="editName" type="text" >
+            <span>Категорія події:</span>
+            <input id="editCategory" type="text" list="categoryList">
+
+            <datalist id="popupCategoryList">
+                <option value="Особиста подія"></option>
+                <option value="Робоча подія"></option>
+                <option value="ВАЖЛИВО!"></option>
+            </datalist>
+            <span>Дата:</span>
+            <input type="date" id="editDate">
+
+            <span> Час:</span>
+            <input type="time" id="editTime">
+            <span></span>
+
+            <button id="changeBtn" class="updatePopup">Зберігти зміни</button>
+        </div>
+       
+    </div>`,
+        maskColor: `#fff`,
+        maskOpacity: '0.01',
+    })
+
+    
+// let startPopupAddEvCol = document.querySelectorAll('.showPopup')
+
+
+    window.addEventListener('load', () => { 
+
+        let startPopupAddEvCol = document.querySelectorAll('.material-icons')
+        console.log("todoMain -> startPopupAddEvCol", startPopupAddEvCol)
+
+        // function getElements() {
+            inputElemEvent = document.querySelector('#inpEvent')
+            inputElemCategory = document.querySelector('#inpCategory')
+            dateInput = document.querySelector('#dateInput')
+            timeInput = document.querySelector('#timeInput')
+            addBtn = document.querySelector('#addBtn')
+            sortByDateBtn = document.querySelector('#sortByDateBtn')
+            managePanel = document.querySelector('#eventManagePanel')
+            selectElem = document.querySelector('#categoryFilter')
+            shortListBtn = document.querySelector('#shortListBtn')
+        // }
+    
+        // function addListeners() {
+            
+            addBtn.addEventListener('click', addEvent)
+            sortByDateBtn.addEventListener('click', sortEventListByDate)
+            shortListBtn.addEventListener('change', multipleFilter)
+            selectElem.addEventListener('change', multipleFilter)
+          
+            // managePanel.addEventListener('click', managePanelReduct)
+        // }
+
+
+        changeBtn = document.querySelector('#changeBtn')
+        closePopupBtn = document.querySelector('.start2-popupClose')
+        console.log("todoMain -> closePopupBtn", closePopupBtn)
+        // closePopupBtn.classList.add('updatePopup')
+        changeBtn.addEventListener('click', commitEdit)
+
+
+        initCalendar()
+        loadEvents()
+        renderAllEvents(eventList)
+        updateFilterOptions()
+    })
+
 
     function addEvent() {
 
@@ -270,7 +366,13 @@ function todoMain() {
         edit.innerText = 'edit'
         edit.className = 'material-icons'
         edit.classList.add('showPopup')
-        edit.addEventListener('click', editEvent)
+        // edit.addEventListener('click', editEvent)
+        edit.addEventListener('click', function(event){
+            editEvent(event)
+            document.querySelector('.start2').click()
+            console.log("todoMain -> document.querySelector('.start2')", document.querySelector('.start2'))
+
+        })
         editCell.appendChild(edit)
         eventRow.appendChild(editCell)
 
@@ -385,12 +487,15 @@ function todoMain() {
             },
             locale: 'uk',
             contentHeight: 'auto',
+            themeSystem: 'bootstrap',
             buttonIcons: false, // show the prev/next text
             weekNumbers: true,
             navLinks: true, // can click day/week names to navigate views
             editable: true,
             dayMaxEvents: true, // allow "more" link when too many events
             events: [],
+            dateClick: function(info) {
+                document.querySelector('.start').click()},
 
 
             //код - Віталій Скиртач
@@ -461,100 +566,66 @@ function todoMain() {
 
     }
 
-    function managePanelReduct(event) {
-        if (event.target.matches('span') && event.target.dataset.editable == 'true') {
-            let tempInputElem
-            switch (event.target.dataset.type) {
-                case 'date':
-                    tempInputElem = document.createElement('input')
-                    tempInputElem.type = 'date'
-                    tempInputElem.value = event.target.dataset.value
-                    break
-                case 'time':
-                    tempInputElem = document.createElement('input')
-                    tempInputElem.type = 'time'
-                    tempInputElem.value = event.target.innerText
-                    break
-                case 'name':
-                    tempInputElem = document.createElement('input')
-                    tempInputElem.type = 'text'
-                    tempInputElem.value = event.target.innerText
-                    break
-                case 'category':
-                    tempInputElem = document.createElement('input')
-                    tempInputElem.type = 'text'
-                    tempInputElem.value = event.target.innerText
-                    break
-            }
-            tempInputElem.addEventListener('change', addNewEventData)
-            event.target.innerText = ''
-            event.target.appendChild(tempInputElem)
-        }
+    // function managePanelReduct(event) {
+    //     if (event.target.matches('span') && event.target.dataset.editable == 'true') {
+    //         let tempInputElem
+    //         switch (event.target.dataset.type) {
+    //             case 'date':
+    //                 tempInputElem = document.createElement('input')
+    //                 tempInputElem.type = 'date'
+    //                 tempInputElem.value = event.target.dataset.value
+    //                 break
+    //             case 'time':
+    //                 tempInputElem = document.createElement('input')
+    //                 tempInputElem.type = 'time'
+    //                 tempInputElem.value = event.target.innerText
+    //                 break
+    //             case 'name':
+    //                 tempInputElem = document.createElement('input')
+    //                 tempInputElem.type = 'text'
+    //                 tempInputElem.value = event.target.innerText
+    //                 break
+    //             case 'category':
+    //                 tempInputElem = document.createElement('input')
+    //                 tempInputElem.type = 'text'
+    //                 tempInputElem.value = event.target.innerText
+    //                 break
+    //         }
+    //         tempInputElem.addEventListener('change', addNewEventData)
+    //         event.target.innerText = ''
+    //         event.target.appendChild(tempInputElem)
+    //     }
 
-        function addNewEventData(event) {
-            const newEventData = event.target.value
-            const eventId = event.target.parentNode.dataset.id
+        // function addNewEventData(event) {
+        //     const newEventData = event.target.value
+        //     const eventId = event.target.parentNode.dataset.id
 
-            calendar.getEventById(eventId).remove()
+        //     calendar.getEventById(eventId).remove()
 
-            eventList.forEach(itemObj => {
-                if (itemObj.id === eventId) {
-                    // itemObj.name = newEventName
-                    itemObj[event.target.parentNode.dataset.type] = newEventData
-                    addEventToCalendar({
-                        id: itemObj.id,
-                        title: itemObj.name,
-                        start: itemObj.date,
-                    })
-                    updateGoogleEvent(itemObj);
-                    // console.log(itemObj);
-                }
-            })
+        //     eventList.forEach(itemObj => {
+        //         if (itemObj.id === eventId) {
+        //             // itemObj.name = newEventName
+        //             itemObj[event.target.parentNode.dataset.type] = newEventData
+        //             addEventToCalendar({
+        //                 id: itemObj.id,
+        //                 title: itemObj.name,
+        //                 start: itemObj.date,
+        //             })
+        //             updateGoogleEvent(itemObj);
+        //             // console.log(itemObj);
+        //         }
+        //     })
 
-            saveEvent()
-            clearEvents()
-            renderAllEvents(eventList)
-            updateFilterOptions()
-        }
-    }
+    //         saveEvent()
+    //         clearEvents()
+    //         renderAllEvents(eventList)
+    //         updateFilterOptions()
+    //     }
+    // }
 
-    let popup = new PopUp({
-        openBtn: 'showPopup',
-        container: 'popup',
-        reload: 'updatePopup',
-        content: ` <div class="panel panel-popup d-flex">
-        <div class="todo-input todo-block align-self-stretch w-100">
-            <span>Подія</span>
-            <input id="editName" type="text" >
-            <span>Категорія події:</span>
-            <input id="editCategory" type="text" list="categoryList">
+   
 
-            <datalist id="popupCategoryList">
-                <option value="Особиста подія"></option>
-                <option value="Робоча подія"></option>
-                <option value="ВАЖЛИВО!"></option>
-            </datalist>
-            <span>Дата:</span>
-            <input type="date" id="editDate">
-
-            <span> Час:</span>
-            <input type="time" id="editTime">
-            <span></span>
-
-            <button id="changeBtn" class="updatePopup">Зберігти зміни</button>
-        </div>
-       
-    </div>`,
-        maskColor: `#1B3A56`,
-        maskOpacity: '0.9',
-    })
-
-    window.addEventListener('load', () => {
-        changeBtn = document.querySelector('#changeBtn')
-        closePopupBtn = document.querySelector('.showPopup-popupClose')
-        closePopupBtn.classList.add('updatePopup')
-        changeBtn.addEventListener('click', commitEdit)
-    })
+   
 
     function commitEdit(event) {
 

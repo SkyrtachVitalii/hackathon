@@ -1,3 +1,17 @@
+
+body{
+    background: #d6e6f9 !important;
+}
+
+.start, .start2{
+    position: absolute;
+    left:10000px;
+}
+
+.calendar-wrapper, #eventManagePanel{
+    background: #fff;
+}
+
 .strike {
     text-decoration: line-through;
 }
@@ -8,7 +22,7 @@
 
 th, td {
     text-align: center;
-    border: 1px solid black;
+    border: 1px solid #efefef;
     padding: 5px;
 }
 
@@ -16,6 +30,8 @@ th, td {
     display: block;
     width: 100%;
 }
+
+
 
 /* ===================================== Aleksandr ====================================== */
 
@@ -69,33 +85,28 @@ h3 {
     border-radius: 10px;
 }
 
-body {
-    /* font-family:"Titillium Web", sans-serif; */
+/* body {
     font-family: 'Roboto Condensed', sans-serif;
-}
+} */
 
 .todo-block {
-    border: 1px solid  #00467A;
     padding: 1rem;
     border-radius: 20px;
-    color:  #00467A;
 }
 
 #date, #time, #nazva, #allCategory {
-    /* border-radius: 10px; */
-    background-color: #00467A;
+
     color: white;
 }
 
 #categoryFilter {
-    background-color: #016986;
-    color: #FEFEFE;
+
     border-radius: 10px;
 }
 
 #done {
-    background-color: green;
-    color: white;
+    /* background-color: green; */
+
     min-width: 75px;
 }
 
@@ -105,14 +116,12 @@ body {
 
 
 #edit{
-    background-color: red;
-    color: white;
+
     min-width: 110px;
 }
 
 #delete {
-    background-color: red;
-    color: white;
+
     min-width: 110px;
 }
 
@@ -180,12 +189,12 @@ body {
     background-color: #ffd6cc;
 } */
 
-button {
+/* button {
     background-color: #025B86;
     color: #99CCD1;
     border: 1px outset #01467A;
     border-radius: 5px;
-}
+} */
 
 button:hover {
     background-color: #01467A;
@@ -204,7 +213,7 @@ button:hover {
 
 #inpEvent, #inpCategory, #dateInput, #timeInput {
     border-radius: 5px;
-    border-color: #0146;
+    /* border-color: #0146; */
 }
 
 .flexContainer {
@@ -214,18 +223,18 @@ button:hover {
 }
 
 .panel {
-    margin: 0 15px;
-    width: 30%;
+    /* margin: 0 15px; */
+    width: 100%;
 }
 
-.panel-popup{
+/* .panel-popup{
     width: 50%;
     margin: 0 auto;
-}
+} */
 
 .calendar-wrapper {
     margin: 0 15px;
-    width: 70%;
+    width: 100%;
 }
 
 .fc-button {
@@ -247,6 +256,11 @@ button:hover {
 }
 
 
+.container{
+    padding-left: 15px  !important;
+    padding-right: 15px  !important;
+    max-width:1200px  !important;
+}
 
 
 @media screen and (max-width: 1200px) {
@@ -256,6 +270,11 @@ button:hover {
 }
 
 @media screen and (max-width: 992px) {
+    .container{
+        max-width:1200px  !important;
+
+    }
+
     .flexContainer {
         flex-wrap: wrap;
     }

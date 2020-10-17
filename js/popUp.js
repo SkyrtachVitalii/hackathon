@@ -51,6 +51,7 @@ function PopUp(obj) {
 
         // Show popup buttons:
         for (let item of document.querySelectorAll(`.${this.openBtn}`)) {
+            console.log("PopUp -> `.${this.openBtn}`", `.${this.openBtn}`)
             item.addEventListener('click', () => {
                 this.showPopup()
             })
@@ -64,8 +65,9 @@ function PopUp(obj) {
                 for (let item of document.querySelectorAll(`.${this.openBtn}`)) {
                     item.addEventListener('click', () => {
                         this.showPopup()
+                        console.log("PopUp -> this.showPopup()", this.showPopup())
                     })
-                    console.log(item)
+                    // console.log(item)
                 }
             })
         }
@@ -76,6 +78,7 @@ function PopUp(obj) {
                 for (let item of document.querySelectorAll(`.${this.openBtn}`)) {
                     item.addEventListener('click', () => {
                         this.showPopup()
+                        console.log("this.showPopup()", this.showPopup())
                     })
                     // console.log(item)
                 }
@@ -94,7 +97,7 @@ function PopUp(obj) {
 
     this.createPopupElements = function () {
         return `<div class="${popupMaskName}"></div>
-                        <div class="container ${popupWindowName} text-center rounded pt-2 pr-2 pb-4 pl-2">
+                        <div class="container ${popupWindowName} w-25 shadow-lg text-center rounded pt-2 pr-2 pb-4 pl-2">
                             <div class="row">
                                 <div class="col">
                                     <div class="${btnCloseName} d-flex justify-content-center align-items-center border border-dark rounded-circle ml-auto mb-1" type="button" style="width: 30px; height: 30px; transition: transform ease-in-out 0.3s"><p style="font-size:18px; font-family:'Montserrat', sans-serif; margin:0;">&#10006</p></div>
