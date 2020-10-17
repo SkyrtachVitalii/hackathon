@@ -9,3 +9,6 @@
   text-align: center;
   color: #6c757d !important;
 }
+.todo-block {
+  border: none;
+}
