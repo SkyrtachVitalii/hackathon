@@ -61,12 +61,20 @@ input {
     color:  #00467A;
 }
 
-h3 {
-    color: #E2E9EF;
-    font-family: "rowdies", cursive;
-    padding: 1rem;
-    background-color:  #00467A;
-    border-radius: 10px;
+h3 {width: max;
+    height: 58px;
+    font-family: HelveticaNeue;
+    font-size: 16px;
+    font-weight: bold;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: -0.1px;
+    text-align: center;
+    color: #6c757d;
+    border-radius: 12px;
+    box-shadow: 0 2px 40px 0 rgba(0, 0, 0, 0.07);
+    background-color: #ffffff;
 }
 
 body {
@@ -88,9 +96,16 @@ body {
 }
 
 #categoryFilter {
-    background-color: #016986;
-    color: #FEFEFE;
-    border-radius: 10px;
+  background-color:white;
+  border-radius: 10px;
+  font-family: HelveticaNeue;
+  font-size: 12px;
+  font-weight: bold;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: normal;
+  letter-spacing: -0.19px;
+  color: #007bff;
 }
 
 #done {
@@ -104,16 +119,17 @@ body {
 }
 
 
-#edit{
-    background-color: red;
-    color: white;
-    min-width: 110px;
-}
-
-#delete {
-    background-color: red;
-    color: white;
-    min-width: 110px;
+#edit, #delete{
+    background-color: #d0021b;
+    font-family: HelveticaNeue;
+    font-size: 16px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 1.5;
+    letter-spacing: normal;
+    text-align: center;
+    color: #ffffff;
 }
 
 #allCategory{
@@ -302,3 +318,78 @@ button:hover {
 
     }
 } */
+
+/*Aleksaner 17.10.20*/
+#main{
+    background:#d6e6f9;
+}
+
+#k1,#k2, #k3{border-radius: 20px;
+    box-shadow: 0 2px 40px 0 rgba(0, 0, 0, 0.07);
+    background-color: #ffffff;}
+
+#k2 span{font-family: HelveticaNeue;
+    font-size: 16px;
+    font-weight: bold;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: -0.1px;
+   
+    color: #6c757d;}    
+
+
+#inpEvent, #inpCategory,
+ #dateInput, #timeInput {
+  border-radius: 6px;
+  border: solid 1px #007bff;
+  font-family: HelveticaNeue;
+  font-size: 14px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.71;
+  letter-spacing: normal;
+  text-align: center;
+  color: #007bff; 
+ }   
+
+ #addBtn,#sortByDateBtn{
+    background-color: #007bff;
+    font-family: HelveticaNeue;
+    font-size: 16px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 1.5;
+    letter-spacing: normal;
+    text-align: center;
+    color: #ffffff;
+ }
+ #edone{
+     background: #58cb7d;
+     font-family: HelveticaNeue;
+     font-weight: bold;
+     font-size: 14px;
+     font-style: normal;
+     font-stretch: normal;
+     letter-spacing: -0.22px;
+     line-height: normal;
+     color: #ffffff;
+     border-radius: 4px;
+ }
+ #date,#tim,#nazva,#allCategory{
+    
+    background-color: #007bff;
+    font-family: HelveticaNeue;
+    font-size: 16px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 1.5;
+    letter-spacing: normal;
+    text-align: center;
+    color: #ffffff;
+ } 
+ 
+ 
