@@ -285,7 +285,9 @@ function renderEvent({
                         title: itemObj.name,
                         start: itemObj.date,
                     })
+                    
                     updateGoogleEvent(itemObj);
+                    console.log(itemObj);
                     // console.log(itemObj);
                 }
             })
@@ -424,18 +426,18 @@ function renderEvent({
             weekday: 'long',
         })
                 document.getElementById('datePopup').innerHTML = uaDate;
-                console.log("clicked event date:" + date);
+                // console.log("clicked event date:" + date);
                 
             },
-            eventContent: function (arg) {
-                let italicEl = document.createElement('i')
+            // eventContent: function (arg) {
+            //     let italicEl = document.createElement('i')
 
-                if (arg.event.extendedProps.isUrgent) {
-                    italicEl.innerHTML = 'urgent event'
-                } else {
-                    italicEl.innerHTML = 'normal event'
-                }
-            }
+            //     if (arg.event.extendedProps.isUrgent) {
+            //         italicEl.innerHTML = 'urgent event'
+            //     } else {
+            //         italicEl.innerHTML = 'normal event'
+            //     }
+            // }
     
     // eventContent:{ html: '<div class="eventcheckbox"><input id="checkboxEvent" type="checkbox" class="event" name="eventCheckbox">event.title</input><div>' }
             //код - Віталій Скиртач
@@ -462,7 +464,7 @@ function renderEvent({
         
         
         document.getElementById('dateCalendar').innerHTML = string.slice(0, -3);
-        console.log(string);   
+        // console.log(string);   
     }
 function capitalizeFirstLetter(string) {
   return string.charAt(0).toUpperCase() + string.slice(1);

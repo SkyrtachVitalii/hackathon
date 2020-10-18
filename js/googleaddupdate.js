@@ -43,12 +43,13 @@ function addGoogleEvent(eventObj) {
 }
     
 function updateGoogleEvent(itemObj) {
+    console.log(itemObj);
     if (gapi.auth2.getAuthInstance().isSignedIn.get()) {
         // console.log('updateG: ' + itemObj.name);
        if(!itemObj.time) var event = {
             'summary': itemObj.name,
             // 'id': itemObj.id,
-           'description': eventObj.text,
+           'description': itemObj.text,
             'start': {
                 'date': itemObj.date,
                 'timeZone': 'Europe/Kiev',
