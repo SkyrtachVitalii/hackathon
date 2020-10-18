@@ -1,3 +1,12 @@
+.container {
+  border-radius: 20px;
+  margin: 0 auto;
+}
+
+.wrapper {
+  max-width: 1170px;
+  margin: 93px 0px 93px;
+}
 .fc-col-header-cell-cushion {
   text-transform: uppercase;
   font-size: 10px;
@@ -18,7 +27,7 @@ tr {
 body {
   max-width: 1440px;
   background-color: #d6e6f9;
-  margin: 93px 136px;
+  margin: 0 auto;
 }
 .flexContainer {
   max-width: 1170px;
@@ -26,7 +35,19 @@ body {
 .calendar-wrapper {
   width: 100%;
   background-color: #ffffff;
+  border-radius: 12px;
 }
+.fc-theme-standard {
+  border: none;
+  border-radius: 12px;
+}
+.fc {
+  border-radius: 12px;
+}
+.fc-scrollgrid {
+  border-radius: 12px;
+}
+
 .todo-block {
   padding: 0px;
 }
@@ -41,6 +62,7 @@ body {
   display: flex;
   flex-wrap: nowrap;
   align-items: center;
+  flex-direction: row;
   padding: 10px;
 }
 
@@ -79,12 +101,15 @@ body {
   height: 13px;
 }
 .monthcarusel {
-  width: 185px;
+  width: 175px;
   display: flex;
   flex-wrap: nowrap;
   justify-content: space-between;
   letter-spacing: -0.1px;
   text-align: center;
+  align-self: center;
+  margin-left: 132px;
+
   /* text-transform: capitalize; */
 }
 .month {
@@ -106,7 +131,7 @@ body {
 }
 .gmail {
   display: flex;
-  width: 240px;
+  min-width: 240px;
   height: 38px;
   flex-wrap: nowrap;
   align-items: center;
@@ -114,7 +139,7 @@ body {
   border-radius: 10px;
   border-color: #007bff;
   padding: 9px 16px;
-  margin-right: 132px;
+  /* margin-right: 132px; */
   cursor: pointer;
   transition: box-shadow 0.3s;
 }
