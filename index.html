@@ -31,11 +31,11 @@
 
     <!-- Own Styles -->
     
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="css/fullcalendarcastom.css">
+    <link rel="stylesheet" href="./css/style.css">
+    <link rel="stylesheet" href="./css/fullcalendarcastom.css">
     <style>
         #zatemnenie {
-            background: rgba(102, 102, 102, 0.5);
+            /* background: rgba(102, 102, 102, 0.5); */
             width: 100%;
             height: 100%;
             position: absolute;
@@ -58,6 +58,9 @@
             left: 0;
             margin: auto;
             background: #fff;
+            padding: 40px 35px 15px 35px;
+            box-shadow: 0 2px 60px 0 rgba(0, 0, 0, 0.37);
+  background-color: #ffffff;
         }
     
         #zatemnenie:target {
@@ -77,7 +80,8 @@
         }
     
         .closert:hover {
-            background: #e6e6ff;
+            background-color: #e6e6ff;
+        
         }
     </style>
 </head>
@@ -85,40 +89,55 @@
 <body>
     <div id="zatemnenie">
         <div id="okno">
-            <input id="inpTitle" placeholder="Добавьте название"></input>
-            <input id="inpText" placeholder="Добавьте описание"></input>
-            <span id="datePopup"></span>
-            <input id="timeInputStart" type="time"></input>
-            <input id="timeInputEnd" type="time"></input>
-            <div>
+            <img class="img-exit" id="closePopup" src="./images/exit.svg">
+        
+            <input id="inpTitle" class="addname" placeholder="Добавьте название"></input>
+            <hr>
+            </hr>
+            <input id="inpText" class="adddesc" placeholder="Добавьте описание"></input>
+            <hr>
+            </hr>
+            
+            
+            <div class="time-select">
+                <span id="datePopup" class="date-popup"></span>
+                <input id="timeInputStart" class="timepick" type="time"></input>
+                <input id="timeInputEnd" class="timepick"  type="time"></input>
                 <input id="checkbox" type="checkbox" name="allDay"></input>
-                <label for="allDay">Весь день</label>
-        </div>
-        <div>
-            <span id="popUpDelete">Удалить</span>
-            <span id="popUpSave">Сохранить</span>
-            <span id="popUpAdd">Добавить</span>
+                <label for="allDay" class="allday">Весь день</label>
+            </div>
+            
+        <div class="popupfooter">
+            <span id="popUpDelete" class="pdelete">Удалить</span>
+            <span id="popUpSave" class="psave">Сохранить</span>
+            <span id="popUpAdd" class="padd">Добавить</span>
         </div>
             
-            <button id="closePopup" class="closert">Закрыть окно</button>
+            <!-- <button id="closePopup" class="closert">Закрыть окно</button> -->
         </div>
     </div>
 
     <div class="container py-3">
 
-        <div class="row my-3 px-3">
-            <span id="today">Сегодня</span>
-            <div>
-                <div>
-                    <span id="authorize_button" style="display: none;">Додати Google Календар</span>
-                    <span id="signout_button" style="display: none;">Видалити Google Календар</span>
+        <div>
+            
+            <div class="topline">
+                
+                    <span id="today" class="today">Сегодня</span>
+                <div class="gmail">
+                    <span id="authorize_button" class="google-button" style="display: none;">Синхронизировать с Gmail</span>
+                    <span id="signout_button" class="google-button" style="display: none;">Отвязать Gmail</span>
                     <!-- <span id="gmail" style="display: none;"></span> -->
-                    <img src="./images/gmail.jpg">
+                    <img class="img-google" src="./images/gmail.jpg">
+                    
                 </div>
-            <span id=prevMonth> &lt;&nbsp;&nbsp; </span>
-            <span id="dateCalendar"></span>
-            <span id=nextMonth> &nbsp;&nbsp;&gt; </span>
-            <span></span>
+                <div class="monthcarusel">
+                <img id=prevMonth class="arrowbtn" src="./images/arrowL.svg"></img>
+                <span id="dateCalendar" class="month"></span>
+                <img id=nextMonth class="arrowbtn" src="./images/arrowR.svg"></img>
+            </div>
+            
+            
         </div>
 
         <div class="flexContainer mb-3">
@@ -133,7 +152,7 @@
     </div>
 
     <script defer src="fullcalendar-5.3.2/lib/main.min.js"></script>
-    <script defer src="fullcalendar-5.3.2/lib/locales/uk.js"></script>
+    <script defer src="fullcalendar-5.3.2/lib/locales/ru.js"></script>
     <script src="js/googleaddupdate.js" type="text/javascript"></script>
     <script defer src="js/app.js"></script>
         <!-- <script src="js/popUp.js"></script> -->

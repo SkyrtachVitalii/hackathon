@@ -51,14 +51,14 @@
         function updateSigninStatus(isSignedIn) {
             if (isSignedIn) {
                 authorizeButton.style.display = 'none';
-                signoutButton.style.display = 'block';
+                signoutButton.style.display = 'inline-block';
                 // gmailInfo.style.display = 'none'
                 // gmailInfo.innerHTML = gapi.auth2.getAuthInstance().currentUser.get().nt.Wt
                 // gmailInfo.style.display = 'block'
                 // console.log('signed gCal: ' + isSignedIn);
                 // console.log(gapi.auth2.getAuthInstance().currentUser.get().nt.Wt);   
             } else {
-                authorizeButton.style.display = 'block';
+                authorizeButton.style.display = 'inline-block';
                 signoutButton.style.display = 'none';
                 // gmailInfo.style.display = 'none';
                 // console.log('signed gCal: ' + isSignedIn); 

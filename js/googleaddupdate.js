@@ -4,6 +4,7 @@ function addGoogleEvent(eventObj) {
             var event = {
                 'summary': eventObj.name,
                 'id': eventObj.id,
+                'description': eventObj.text,
                 'start': {
                     'date': eventObj.date,
                     'timeZone': 'Europe/Kiev',
@@ -12,12 +13,14 @@ function addGoogleEvent(eventObj) {
                     'date': eventObj.date,
                     'timeZone': 'Europe/Kiev',
                 },
+                
             }
         }
         else {
             var event = {
                 'summary': eventObj.name,
                 'id': eventObj.id,
+                'description': eventObj.text,
                 'start': {
                     'dateTime': eventObj.date + 'T' + eventObj.timeStart + ':00',
                     'timeZone': 'Europe/Kiev',
@@ -26,6 +29,7 @@ function addGoogleEvent(eventObj) {
                     'dateTime': eventObj.date + 'T' + eventObj.timeEnd + ':00',
                     'timeZone': 'Europe/Kiev',
                 },
+                
             }
         }
         console.log(event);
@@ -44,6 +48,7 @@ function updateGoogleEvent(itemObj) {
        if(!itemObj.time) var event = {
             'summary': itemObj.name,
             // 'id': itemObj.id,
+           'description': eventObj.text,
             'start': {
                 'date': itemObj.date,
                 'timeZone': 'Europe/Kiev',
@@ -51,11 +56,13 @@ function updateGoogleEvent(itemObj) {
             'end': {
                 'date': itemObj.date,
                 'timeZone': 'Europe/Kiev',
-            },
+           },
+            
         }
         else var event = {
                 'summary': itemObj.name,
                 // 'id': itemObj.id,
+                'description': eventObj.text,
                 'start': {
                     'dateTime': itemObj.date + 'T' + itemObj.time + ':00',
                     'timeZone': 'Europe/Kiev',
@@ -63,7 +70,7 @@ function updateGoogleEvent(itemObj) {
                 'end': {
                     'dateTime': itemObj.date + 'T' + itemObj.time + ':00',
                     'timeZone': 'Europe/Kiev',
-                },
+           },
             }
         var request = gapi.client.calendar.events.update({
             'calendarId': CAL_ID,

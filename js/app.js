@@ -14,10 +14,12 @@ function todoMain() {
         date,
         eventClickId,
         checkboxPopup,
+        monthPrev,
+        monthNext,
+        dateCalendar,
         saveEvents,
         eventList = [],
         calendar,
-        changeBtn,
         closePopupBtn
     var pop = document.getElementById("zatemnenie");
 
@@ -49,27 +51,55 @@ function todoMain() {
         saveButton = document.querySelector('#popUpSave')
         addButton = document.querySelector('#popUpAdd')
         checkboxPopup = document.querySelector('#checkbox')
+        monthPrev = document.querySelector('#prevMonth')
+        monthNext = document.querySelector('#nextMonth')
+        dateCalendar = document.querySelector('#dateCalendar')
     }
-   
+    // var render = document.getElementById('checkboxEvent');
+    // console.log(render);
+    
     function addListeners() {
         saveButton.addEventListener('click', editEvent);
         deleteButton.addEventListener('click', deleteEvent)
         addButton.addEventListener('click', addEvent)
         checkboxPopup.addEventListener('change', setTimesShow)
+        monthPrev.addEventListener('click', prevMonth)
+        monthNext.addEventListener('click', nextMonth)
+    }
+    function prevMonth() {
+        calendar.prev();
+        calendarDate();
+    }
+    function nextMonth() {
+        calendar.next();
+        calendarDate();
     }
    function setTimesShow(){
        if (checkboxPopup.checked) {
            timeInputStart.style = "display: none";
            timeInputEnd.style = "display: none";
+           timeInputStart.value = "";
+           timeInputEnd.value = "";
+           console.log(checkboxPopup.checked);
        } else {
            timeInputStart.style = "display: initial";
            timeInputEnd.style = "display: initial";
+           console.log(checkboxPopup.checked);
        }
     }
     console.log(eventList)
          window.onclick = function (e) {
-        if(e.target == zatemnenie){pop.style.display = "none";
-       } console.log(e.target)
+             if (e.target == zatemnenie) {
+                 pop.style.display = "none";
+             }
+            //  if (e.target == render) {
+            //      console.log('es mazafaka');
+                 
+                 
+            //  };
+             console.log(e.target);
+             
+             if (timeInputStart.value > timeInputEnd.value) timeInputEnd.value = timeInputStart.value;
         
     }
     function clearInputs() {
@@ -102,6 +132,9 @@ function todoMain() {
         const inputTextEvent = inputText.value
         inputText.value = ''
 
+        const inputChecked = checkboxPopup.checked
+        checkboxPopup.checked = false
+
         // Create obj for new event
         let eventObj = {
             id: _uuid(),
@@ -112,12 +145,14 @@ function todoMain() {
             timeEnd: inputValueTimeEnd,
             text: inputTextEvent,
             isDone: false,
+            isAllday: inputChecked,
         }
         console.log(eventObj);
          addEventToCalendar({
                     id: eventObj.id,
                     title: eventObj.name,
                     start: eventObj.date,
+                    extendedProps: true,
                 })
 
         //Render new event category
@@ -189,7 +224,7 @@ function renderEvent({
         
 
     }
-    function fillInput() {
+    function fillInput(info) {
         eventList.forEach(itemObj => {
                 if (itemObj.id === eventClickId) {
                     // updateGoogleEvent(itemObj);
@@ -197,12 +232,17 @@ function renderEvent({
                     timeInputStart.value = itemObj.timeStart;
                     timeInputEnd.value = itemObj.timeEnd;
                     inputText.value = itemObj.text;
-                    console.log(itemObj.timeStart);
+                    checkboxPopup.checked = itemObj.isAllday;
+                    if (itemObj.isAllday) {
+                        timeInputStart.style = "display: none"
+                        timeInputEnd.style = "display: none"
+                    } else {
+                        timeInputStart.style = "display: initial"
+                        timeInputEnd.style = "display: initial"
+                    }
+                    
                 }
         })
-        
-        
-    
 }
     function editEvent(event) {
         const eventId = eventClickId;
@@ -320,15 +360,20 @@ function renderEvent({
         calendar = new FullCalendar.Calendar(calendarEl, {
             headerToolbar: false,
             dayHeaderFormat :{ weekday: 'long'},
-            locale: 'uk',
+            locale: 'ru',
             contentHeight: 'auto',
+            // showNonCurrentDates: false,
             buttonIcons: false, // show the prev/next text
             weekNumbers: false,
             navLinks: false, // can click day/week names to navigate viewsgit
             editable: true,
             dayMaxEvents: true, // allow "more" link when too many events
             events: [],
+            fixedWeekCount: false,
             dateClick: function (info) {
+                checkboxPopup.checked = false;
+                timeInputStart.style = "display: init";
+                timeInputEnd.style = "display: init";
                 date = info.dateStr;
                 addButton.style.display = "block";
                 saveButton.style.display = "none";
@@ -357,7 +402,7 @@ function renderEvent({
                 date = info.event.startStr;
                 inputTitle.value = info.event.title;
                 eventClickId = info.event.id;
-                fillInput();
+                fillInput(info);
                 addButton.style.display = "none";
                 saveButton.style.display = "block";
                 deleteButton.style.display = "block";
@@ -381,9 +426,18 @@ function renderEvent({
                 document.getElementById('datePopup').innerHTML = uaDate;
                 console.log("clicked event date:" + date);
                 
+            },
+            eventContent: function (arg) {
+                let italicEl = document.createElement('i')
+
+                if (arg.event.extendedProps.isUrgent) {
+                    italicEl.innerHTML = 'urgent event'
+                } else {
+                    italicEl.innerHTML = 'normal event'
+                }
             }
-
-
+    
+    // eventContent:{ html: '<div class="eventcheckbox"><input id="checkboxEvent" type="checkbox" class="event" name="eventCheckbox">event.title</input><div>' }
             //код - Віталій Скиртач
             //editable: true,
             //eventDrop: function (info){
@@ -404,9 +458,16 @@ function renderEvent({
             year: 'numeric',
             // weekday: 'long',
         })
-        document.getElementById('dateCalendar').innerHTML = uaDate;
-        console.log(uaDate);   
+        var string = capitalizeFirstLetter(uaDate);
+        
+        
+        document.getElementById('dateCalendar').innerHTML = string.slice(0, -3);
+        console.log(string);   
     }
+function capitalizeFirstLetter(string) {
+  return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
 
     function addEventToCalendar(event) {
         calendar.addEvent(event)
